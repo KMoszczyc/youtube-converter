@@ -1,12 +1,11 @@
 var browser = browser || chrome
-const server_endpoint = 'http://localhost:3000/'
-const download_endpoint = 'http://localhost:3000/download/'
+// 'http://localhost:3000/download/'
+const download_endpoint = server_endpoint + 'https://ytmp3-converter.herokuapp.com/download/'
 
 window.onload = () => {
     var form = document.querySelector("form");
     form.addEventListener("submit", submitUrl, false);
 }
-
 
 async function submitUrl(e){
     e.preventDefault();

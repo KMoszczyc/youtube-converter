@@ -1,13 +1,10 @@
 const fs = require('fs');
 const fsExtra = require('fs-extra')
 const ytdl = require('ytdl-core');
-const jsmediatags = require("jsmediatags");
 const NodeID3 = require('node-id3')
-let youtubeThumbnail = require('youtube-thumbnail');
 const download = require('image-downloader')
 const ffmpeg = require('ffmpeg-static');
 const cp = require('child_process');
-const { info } = require('console');
 
 String.prototype.replaceAll = function replaceAll(search, replace) { return this.split(search).join(replace); }
 const dirPath= 'data/'
@@ -38,8 +35,6 @@ async function getInfo(url){
 
 async function downloadThumbnail(thumbnailUrl){
     console.log('Thumbnail download started')
-    // let thumbnail = youtubeThumbnail(url);
-    // const thumbnailUrl = thumbnail.high.url;
 
     const options = {
         url: thumbnailUrl,
@@ -89,16 +84,7 @@ async function downloadSong(url, res){
         preprocessSong(url)
             .then((songPath) => {
                 console.log('song', songPath)
-                // res.json({song:songPath})
-                // res.sendFile(songPath, { root: '.' })
-                // res.set({ "Content-Type": "audio/mpeg" });
-
                 console.log(fs.existsSync(songPath))
-                // res.set({ 'Content-Length': 20000 });
-                // res.download(songPath)
-                // res.end();
-                // res.connection.end();
-                
 
                 const filename = 'song.mp3'
                 res.set({

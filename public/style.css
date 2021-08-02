@@ -1,0 +1,145 @@
+  
+body{
+    background-color: #ecececdc;
+    color: #333;
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size:16px;
+    font-weight: normal;
+    /* same as above 
+    font: normal 16px Arial, Helvetica, sans-serif;    
+    */
+    line-height: 1.5em; /* distance between one line of text and the next*/
+}
+
+footer{
+    background-color: #ffffff8a;
+    text-align: center;
+    /*margin-top: 300px; dont need it if you use a clr class div before the footer*/
+    padding: 20px;
+
+    position:fixed;
+    bottom:0;
+    width: 100%;
+}
+
+h1 {
+    text-align: center;
+    padding: 20px;
+}
+
+.main-container{
+    width: 85%;
+    margin:auto;
+    display: flex;        
+    flex-direction: column;
+    align-items: center;
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  margin-top: 100px;
+}
+
+.flex-container > div {
+  background-color: #ffffff8a;
+  margin: 10px;
+  padding: 20px;
+}
+
+.convert-form{
+  width: 80%;
+  margin-top: 30px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+#url-text-input{
+  width: 100%;
+  flex: 1;
+  padding: 20px;
+  margin-right: 10px;
+  font-size: 18px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.btn{
+  width: 150px;
+  background-color: #f44336;
+  color:#fff;
+  font-size: 18px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.btn:hover{
+    background-color: #ef5350;
+}
+
+.btn:active{
+    background-color: #e57373;
+}
+
+.lds-ring {
+    display: none;
+    position: relative;
+    width: 80px;
+    height: 80px;
+    margin-top: 20px;
+  }
+  .lds-ring div {
+    box-sizing: border-box;
+    display: block;
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    margin: 8px;
+    border: 8px solid rgb(255, 255, 255);
+    border-radius: 50%;
+    animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    border-color: #f44336 transparent transparent transparent;
+  }
+  .lds-ring div:nth-child(1) {
+    animation-delay: -0.45s;
+  }
+  .lds-ring div:nth-child(2) {
+    animation-delay: -0.3s;
+  }
+  .lds-ring div:nth-child(3) {
+    animation-delay: -0.15s;
+  }
+  @keyframes lds-ring {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  
+
+@media screen and (max-width: 700px) {
+  .flex-container {
+    flex-direction: column;
+  }
+
+  .convert-form {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  #url-text-input{
+    margin-right: 0px;
+    margin-bottom: 10px;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}

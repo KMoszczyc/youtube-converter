@@ -38,7 +38,7 @@ async function submitUrl(e){
     const full_url = download_endpoint+'?'+ new URLSearchParams(params)
 
     submit_btn.disabled = true; 
-    loading_ring.style.display = "inline-block"
+    loading_ring.style.display = "block"
     clearData()
 
     let res = await fetch(full_url)
@@ -53,6 +53,7 @@ async function submitUrl(e){
     download_container.style.display = "flex"
     artist.innerHTML = data.artist
     song_title.innerHTML = data.songTitle
+    song_duration.innerHTML = data.duration
 
     // window.open(`${server_endpoint}${data.song}`);
     download_btn.href = `${server_endpoint}${data.songPath}`

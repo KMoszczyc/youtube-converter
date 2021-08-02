@@ -78,18 +78,17 @@ h3 {
 
 .song-info-list li {
   list-style-type: none;
-  margin: 25px 0;
+  margin: 20px 0;
   font-size: 18px;
 }
 
 #artist  {
-  font-size: 38px;
+  font-size: 26px;
   line-height: 1.1;
 }
 
 #song-title{
-  color: #333;
-  font-size: 26px;
+  font-size: 38px;
   line-height: 1.1;
 }
 
@@ -160,16 +159,18 @@ h3 {
     position: relative;
     width: 80px;
     height: 80px;
-    margin-top: 20px;
+    margin: 30px;
+    align-content: center;
   }
   .lds-ring div {
     box-sizing: border-box;
+    align-self: center;
     display: block;
     position: absolute;
     width: 48px;
     height: 48px;
-    margin: 8px;
-    border: 8px solid rgb(255, 255, 255);
+    margin-left: 16px;
+    border: 6px solid #fff;
     border-radius: 50%;
     animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
     border-color: #f44336 transparent transparent transparent;

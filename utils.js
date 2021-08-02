@@ -20,21 +20,21 @@ async function getInfo(url){
     let info = await ytdl.getBasicInfo(videoID);
     // console.log(info.videoDetails);
     let thumbnailUrl = info.videoDetails.thumbnails[info.videoDetails.thumbnails.length - 2].url.split('?')[0];
-    const yt_title =  info.videoDetails.title;
+    const fullTitle =  info.videoDetails.title;
 
     console.log(thumbnailUrl)
 
-    let [artist, songTitle] = yt_title.split(' - ')
+    let [artist, songTitle] = fullTitle.split(' - ')
     if (songTitle == null){
         songTitle = artist
-        artist = info.videoDetails.author.name;
+        artist = info.videoDetails.author.name.replace(' - Topic', '');
     }
 
     songTitle = songTitle.replace(/ *\([^)]*\) */g, "");
     let songPath =`${artist}-${songTitle}`
     songPath = dirPath + clearText(songPath).replaceAll(' ', '_') + '.mp3'
 
-    return {artist, songTitle, fullTitle: yt_title, songPath: songPath, thumbnailUrl: thumbnailUrl}
+    return {artist, songTitle, fullTitle, songPath, thumbnailUrl, duration: secondsToTime(info.videoDetails.lengthSeconds)}
 }
 
 function clearText(text) {
@@ -95,12 +95,10 @@ async function downloadSong(url, res){
                 console.log('info', info.songPath)
                 console.log(fs.existsSync(info.songPath))
 
-                const filename = 'song.mp3'
                 res.set({
                     // 'Content-disposition': 'attachment; filename=' + filename,
                     "Access-Control-Allow-Origin": "*",
                     // "Content-Type": "application/force-download",
-                    // 'Content-Length': stats.size + 5000000
                 })
                 // res.setHeader("Access-Control-Allow-Origin", "*")
                 // "Content-Type": "application/force-download"
@@ -127,6 +125,17 @@ function clearData(){
     fsExtra.emptyDirSync(dirPath)
 }
 
+function secondsToTime(secondsStr) {
+    let seconds = parseInt(secondsStr)
+    let timeStr = new Date(seconds * 1000).toISOString().substr(11, 8);
+    if (seconds < 3600) 
+        timeStr = timeStr.substring(3, timeStr.length);
+
+    if (seconds < 600) 
+        timeStr = timeStr.substring(1, timeStr.length);
+
+    return timeStr;
+}
 
 module.exports = {
     downloadSong: downloadSong

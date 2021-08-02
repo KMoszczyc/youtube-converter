@@ -50,7 +50,7 @@ h3 {
 }
 
 #download-container{
-  display: flex;
+  display: none;
   flex-direction: row; 
   margin-top: 50px;
 }

@@ -13,6 +13,10 @@ async function getInfo(url){
     const usefullPart = url.split('&list=')[0]
     const [_, videoID] = usefullPart.split('?v=')
 
+    // if it's copied link from youtube mobile app
+    if(!videoID)
+        videoID = usefullPart.split('youtu.be/')[1]
+
     let info = await ytdl.getBasicInfo(videoID);
     // console.log(info.videoDetails);
     let thumbnailUrl = info.videoDetails.thumbnails[info.videoDetails.thumbnails.length - 2].url.split('?')[0];

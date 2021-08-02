@@ -17,15 +17,30 @@
             <input type="text" name="url" id="url-text-input" placeholder="Paste your youtube url here..">
             <input type="submit" class="btn" id="submit-btn" name="submit" value="Convert">
         </form>
+        
         <div class="lds-ring" id="lds-ring"><div></div><div></div><div></div><div></div></div>
-
-        <div class="flex-container">
+        
+        <div id="download-container">
+            <img id="thumbnail_img" src="http://localhost:3000/data/thumbnail.jpg" alt="thumbnail" width="600" >
+            <div id="download-info-container">
+                <ul class="song-info-list">
+                    <li id="artist">Tove Lo</li>
+                    <li id="song-title">Some long song name</li>
+                    <li id="song-duration">05:22</li>
+                </ul>
+                <a id="download-btn" download href="" target="_blank">
+                    <button class="btn">Download</button>
+                </a>
+            </div>
+        </div>
+       
+        <div class="info-container">
             <div class="container-instructions">
                 <h3>Instruction</h3>
                 <ol>
-                    <li>Paste youtube link of desired song to text area</li>
-                    <li>Click 'Convert' and wait for window to pop up</li>
-                    <li>In the new page press three dots and then download</li>
+                    <li>Paste youtube link of desired song to the text area</li>
+                    <li>Click 'Convert' and wait for download button to pop up</li>
+                    <li>Click 'Download'</li>
                     <li>Enjoy!</li>
                 </ol>
             </div>
@@ -41,9 +56,7 @@
                 </ul>
             </div>
         </div>
+        <footer> Copyright &copy; 2021 Kamil Moszczyc</footer>  
     </div>
-
-    <div class="clr"></div>
-    <footer> Copyright &copy; 2021 Kamil Moszczyc</footer>  
 </body>
 </html>

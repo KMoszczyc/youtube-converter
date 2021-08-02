@@ -31,10 +31,15 @@ async function getInfo(url){
     }
 
     songTitle = songTitle.replace(/ *\([^)]*\) */g, "");
-    let songPath =`${artist}-${songTitle}.mp3`
-    songPath = dirPath + songPath.replaceAll(' ', '_').replaceAll('/','').replaceAll('\"', '')
+    let songPath =`${artist}-${songTitle}`
+    songPath = dirPath + clearText(songPath).replaceAll(' ', '_') + '.mp3'
 
     return {artist, songTitle, fullTitle: yt_title, songPath: songPath, thumbnailUrl: thumbnailUrl}
+}
+
+function clearText(text) {
+	const source = typeof text === 'string' || text instanceof String ? text : '';
+	return source.replace(/[[/\]{}()*+?.,\\^$|#\"]/g, '');
 }
 
 async function downloadThumbnail(thumbnailUrl){
@@ -86,9 +91,9 @@ async function downloadSong(url, res){
     ytdl(url, { quality: 'highestaudio' }).pipe(fs.createWriteStream(dirPath+'ytsong.webm')).on("finish", () => {
         console.log("Song download finished!");
         preprocessSong(url)
-            .then((songPath) => {
-                console.log('song', songPath)
-                console.log(fs.existsSync(songPath))
+            .then((info) => {
+                console.log('info', info.songPath)
+                console.log(fs.existsSync(info.songPath))
 
                 const filename = 'song.mp3'
                 res.set({
@@ -100,7 +105,7 @@ async function downloadSong(url, res){
                 // res.setHeader("Access-Control-Allow-Origin", "*")
                 // "Content-Type": "application/force-download"
                 // fs.createReadStream(songPath).pipe(res);
-                res.json({song:songPath})
+                res.json(info)
             })
     });
 }
@@ -115,7 +120,7 @@ async function preprocessSong(url){
     const imagePath = await downloadThumbnail(info.thumbnailUrl);
     setTags(imagePath, info)
     console.log(info.songPath);
-    return info.songPath
+    return info
 }
 
 function clearData(){

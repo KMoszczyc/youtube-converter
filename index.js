@@ -21,7 +21,7 @@ app.listen(port, () => {
 
 
 app.get('/download', async (req, res) => {
-    console.log('endpoint 2')
+    console.log('download started')
     await Utils.downloadSong(req.query.url, res)
 })
 

@@ -11,7 +11,7 @@ const dirPath= 'data/'
 
 async function getInfo(url){
     const usefullPart = url.split('&list=')[0]
-    const [_, videoID] = usefullPart.split('?v=')
+    let [_, videoID] = usefullPart.split('?v=')
 
     // if it's copied link from youtube mobile app
     if(!videoID)

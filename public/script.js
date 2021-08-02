@@ -1,6 +1,8 @@
 var browser = browser || chrome
-// 'http://localhost:3000/download/'
+// 'http://localhost:3000/'
+const server_endpoint = 'https://ytmp3-converter.herokuapp.com/'
 const download_endpoint = 'https://ytmp3-converter.herokuapp.com/download/'
+
 
 window.onload = () => {
     var form = document.querySelector("form");
@@ -27,7 +29,7 @@ async function submitUrl(e){
     document.getElementById("url-text-input").value = ""
     document.getElementById("submit-btn").disabled = false; 
 
-    window.open(`http://localhost:3000/${data.song}`);
+    window.open(`${server_endpoint}${data.song}`);
 
     // blobNDownload()
 }

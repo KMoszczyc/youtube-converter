@@ -1,6 +1,6 @@
 var browser = browser || chrome
 // 'http://localhost:3000/download/'
-const download_endpoint = server_endpoint + 'https://ytmp3-converter.herokuapp.com/download/'
+const download_endpoint = 'https://ytmp3-converter.herokuapp.com/download/'
 
 window.onload = () => {
     var form = document.querySelector("form");

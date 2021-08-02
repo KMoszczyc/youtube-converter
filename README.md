@@ -1,5 +1,5 @@
 # youtube-converter
-YouTube mp3 converter with front in Vanilla JS, CSS, HTML and back in Node,js and Express.js.
+YouTube mp3 converter with frontend in Vanilla JS, CSS, HTML and backend in Node.js and Express.js.
 
 ## Features
 - YouTube video to mp3 conversion

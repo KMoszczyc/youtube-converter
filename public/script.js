@@ -1,12 +1,12 @@
 var browser = browser || chrome
 
 // heroku endpoints
-// const server_endpoint = 'https://ytmp3-converter.herokuapp.com/'
-// const download_endpoint = 'https://ytmp3-converter.herokuapp.com/download/'
+const server_endpoint = 'https://ytmp3-converter.herokuapp.com/'
+const download_endpoint = 'https://ytmp3-converter.herokuapp.com/download/'
 
 // locally
-const server_endpoint = 'http://localhost:3000/'
-const download_endpoint = 'http://localhost:3000/download/'
+// const server_endpoint = 'http://localhost:3000/'
+// const download_endpoint = 'http://localhost:3000/download/'
 
 const submit_btn = document.getElementById("submit-btn")
 const url_text_input = document.getElementById("url-text-input")

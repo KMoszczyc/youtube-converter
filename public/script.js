@@ -1,12 +1,12 @@
 var browser = browser || chrome
 
 // heroku endpoints
-const server_endpoint = 'https://ytmp3-converter.herokuapp.com/'
-const download_endpoint = 'https://ytmp3-converter.herokuapp.com/download/'
+// const server_endpoint = 'https://ytmp3-converter.herokuapp.com/'
+// const download_endpoint = 'https://ytmp3-converter.herokuapp.com/download/'
 
 // locally
-// const server_endpoint = 'http://localhost:3000/'
-// const download_endpoint = 'http://localhost:3000/download/'
+const server_endpoint = 'http://localhost:3000/'
+const download_endpoint = 'http://localhost:3000/download/'
 
 const submit_btn = document.getElementById("submit-btn")
 const url_text_input = document.getElementById("url-text-input")
@@ -24,8 +24,6 @@ const song_duration = document.getElementById("song-duration")
 window.onload = () => {
     var form = document.querySelector("form");
     form.addEventListener("submit", submitUrl, false);
-    download_btn.style.display = "none"
-    download_container.style.display = "none"
     download_btn.onclick = clearTextInput
 }
 
@@ -48,7 +46,7 @@ async function submitUrl(e){
     loading_ring.style.display = "none"
     submit_btn.disabled = false; 
     download_btn.style.display = "block"
-    // hack that prevents browser from caching
+    // hack that prevents browser from caching the img
     thumbnail_img.src = addRandomQueryToPath(`${server_endpoint}data/thumbnail.jpg`)  
     download_container.style.display = "flex"
     artist.innerHTML = data.artist

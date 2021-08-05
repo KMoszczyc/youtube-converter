@@ -2,13 +2,8 @@
 body{
   background-color: #ececec;
   color: #333;
-
-  font-family: Arial, Helvetica, sans-serif;
-  font-size:16px;
-  font-weight: normal;
-  /* same as above 
   font: normal 16px Arial, Helvetica, sans-serif;    
-  */
+ 
   line-height: 1.5; /* distance between one line of text and the next*/
   display:flex; 
   flex-direction:column; 
@@ -50,21 +45,26 @@ h3 {
 }
 
 #download-container{
+  background-color: #fff;
   display: none;
   flex-direction: row; 
   margin-top: 50px;
+  border-radius: 8px;
 }
 
 #thumbnail_img{
   max-width:100%;
   height:auto;
+  display: block;
   border-radius: 8px;
 }
 
+#img-container{
+  margin: 20px 0 20px 20px;
+}
+
 #download-info-container{
-  background-color: #fff;
   padding: 10px 40px;
-  margin-left: 20px;
   display: flex;
   flex-direction: column;
   border-radius: 8px;
@@ -72,7 +72,6 @@ h3 {
 
 .song-info-list{
   color: #000;
-  margin-top: 20px;
   padding-left:10px;
 }
 
@@ -83,7 +82,7 @@ h3 {
 }
 
 #artist  {
-  font-size: 26px;
+  font-size: 22px;
   line-height: 1.1;
 }
 
@@ -94,7 +93,6 @@ h3 {
 
 #song-duration{
   color: #666;
-  /* margin-top: 40px; */
 }
 
 #download-btn{
@@ -238,8 +236,11 @@ h3 {
     flex-direction: column; 
   }
 
-  #download-info-container{
+  /* #download-info-container{
     margin-left: 0px;
-    margin-top: 20px;
+  } */
+
+  #img-container{
+    margin: 20px 20px 0 20px;
   }
 }

@@ -17,7 +17,15 @@ async function getInfo(url){
     if(!videoID)
         videoID = usefullPart.split('youtu.be/')[1]
 
-    let info = await ytdl.getBasicInfo(videoID);
+    let info = null
+    try {
+        info = await ytdl.getBasicInfo(videoID);
+    }
+    catch(err){
+        console.log(err)
+        return {error: "Video with that url doesn't exist!"}
+    }
+
     // console.log(info.videoDetails);
     let thumbnailUrl = info.videoDetails.thumbnails[info.videoDetails.thumbnails.length - 2].url.split('?')[0];
     const fullTitle =  info.videoDetails.title;
@@ -30,11 +38,12 @@ async function getInfo(url){
         artist = info.videoDetails.author.name.replace(' - Topic', '');
     }
 
-    songTitle = songTitle.replace(/ *\([^)]*\) */g, "");
+    // removes parentheses and square brackets
+    songTitle = songTitle.replace(/ *\([^)]*\) */g, "").replace(/ *\[[^\]]*]/g, '');;
     let songPath =`${artist}-${songTitle}`
     songPath = dirPath + clearText(songPath).replaceAll(' ', '_') + '.mp3'
 
-    return {artist, songTitle, fullTitle, songPath, thumbnailUrl, duration: secondsToTime(info.videoDetails.lengthSeconds)}
+    return {artist, songTitle, fullTitle, songPath, thumbnailUrl, songUrl: url, duration: secondsToTime(info.videoDetails.lengthSeconds), error: ""}
 }
 
 function clearText(text) {
@@ -67,14 +76,16 @@ function setTags(image_path, info){
     console.log('Tags are set')
 }
 
-const convertWebmToMp3 = (songPath) => { 
+const convertWebmToMp3 = (songPath, bitrate) => { 
     return new Promise((resolve, reject) => {
         console.log('conversion started!')
         const ffmpegProcess =  cp.spawn(ffmpeg, [
             '-i',
             dirPath+'ytsong.webm',
-            '-acodec',
-            'libmp3lame', 
+            // '-acodec',
+            // 'libmp3lame', 
+            '-b:a',
+            bitrate,
             songPath
         ]);
 
@@ -85,12 +96,12 @@ const convertWebmToMp3 = (songPath) => {
     });
 }
 
-async function downloadSong(url, res){
+async function downloadSong(info, res){
     clearData();
-    
-    ytdl(url, { quality: 'highestaudio' }).pipe(fs.createWriteStream(dirPath+'ytsong.webm')).on("finish", () => {
+    console.log(info)
+    ytdl(info.songUrl, { quality: 'highestaudio' }).pipe(fs.createWriteStream(dirPath+'ytsong.webm')).on("finish", () => {
         console.log("Song download finished!");
-        preprocessSong(url)
+        preprocessSong(info)
             .then((info) => {
                 console.log('info', info.songPath)
                 console.log(fs.existsSync(info.songPath))
@@ -108,11 +119,8 @@ async function downloadSong(url, res){
     });
 }
 
-async function preprocessSong(url){
-    const info = await getInfo(url);
-    console.log('info:', info)
-    
-    await convertWebmToMp3(info.songPath);
+async function preprocessSong(info){
+    await convertWebmToMp3(info.songPath, info.bitrate);
     // fs.renameSync('ytsong.mp3', 'renamed.mp3');
 
     const imagePath = await downloadThumbnail(info.thumbnailUrl);
@@ -138,5 +146,6 @@ function secondsToTime(secondsStr) {
 }
 
 module.exports = {
-    downloadSong: downloadSong
+    downloadSong: downloadSong,
+    getInfo: getInfo
 }

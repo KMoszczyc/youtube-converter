@@ -1,6 +1,6 @@
   
 body{
-  background-color: #ececec;
+  background-color: #eee;
   color: #333;
   font: normal 16px Arial, Helvetica, sans-serif;    
  
@@ -47,6 +47,8 @@ h3 {
 #download-container{
   background-color: #fff;
   display: none;
+  /* display: flex; */
+
   flex-direction: row; 
   margin-top: 50px;
   border-radius: 8px;
@@ -95,8 +97,36 @@ h3 {
   color: #666;
 }
 
-#download-btn{
+.custom-select{
+  color: #666;
+  font: normal 16px Arial, Helvetica, sans-serif;    
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  padding: 15px 10px;
+  margin-bottom: 20px;
   margin-top: auto;
+}
+
+optgroup{
+  font-weight: bolder;
+}
+option{
+  color: #666;
+  font: normal 16px Arial, Helvetica, sans-serif;    
+  padding: 15px 10px;
+  min-height: 1.2;
+}
+
+
+#convert-btn{
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+#download-btn{
+  display: none;
+  width: 100%;
   margin-bottom: 10px;
 }
 
@@ -114,13 +144,37 @@ h3 {
   border-radius: 8px;
 }
 
+#url-form-container{
+  width: 100%;
+  margin-top: 20px;
+}
+
+#url-error-box{
+  display: none;
+}
+
+.error-box{
+  background-color: #f8d7da;
+  color: #721c24;
+  font-size: 16px;
+  display: inline-block;
+  padding: 10px 20px;
+  margin: 10px 0;
+  border: 1px solid #cfadaf;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+
 .convert-form{
   width: 100%;
-  margin-top: 30px;
-
   display: flex;
   flex-direction: row;
   align-items: center;
+}
+
+#submit-btn{
+  width: 150px;
 }
 
 #url-text-input{
@@ -135,7 +189,8 @@ h3 {
 }
 
 .btn{
-  width: 150px;
+  /* width: 150px; */
+  width: 100%;
   background-color: #f44336;
   color:#fff;
   font-size: 20px;
@@ -152,15 +207,24 @@ h3 {
     background-color: #e57373;
 }
 
-.lds-ring {
-    display: none;
+#get-info-ring{
+  margin-top: 50px;
+  display: none;
+}
+
+#convert-ring{
+  display: none;
+  align-self: center;
+}
+
+.loading-ring {
     position: relative;
     width: 80px;
     height: 80px;
-    margin: 30px;
+    margin: 20px;
     align-content: center;
   }
-  .lds-ring div {
+  .loading-ring div {
     box-sizing: border-box;
     align-self: center;
     display: block;
@@ -168,21 +232,21 @@ h3 {
     width: 48px;
     height: 48px;
     margin-left: 16px;
-    border: 6px solid #fff;
+    border: 5px solid #fff;
     border-radius: 50%;
-    animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    animation: loading-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
     border-color: #f44336 transparent transparent transparent;
   }
-  .lds-ring div:nth-child(1) {
+  .loading-ring div:nth-child(1) {
     animation-delay: -0.45s;
   }
-  .lds-ring div:nth-child(2) {
+  .loading-ring div:nth-child(2) {
     animation-delay: -0.3s;
   }
-  .lds-ring div:nth-child(3) {
+  .loading-ring div:nth-child(3) {
     animation-delay: -0.15s;
   }
-  @keyframes lds-ring {
+  @keyframes loading-ring {
     0% {
       transform: rotate(0deg);
     }
@@ -226,6 +290,10 @@ h3 {
   #url-text-input{
     margin-right: 0px;
     margin-bottom: 10px;
+  }
+
+  #submit-btn {
+    width: 100%;
   }
 
   .btn {

@@ -22,6 +22,13 @@ app.listen(port, () => {
 
 app.get('/download', async (req, res) => {
     console.log('download started')
-    await Utils.downloadSong(req.query.url, res)
+    await Utils.downloadSong(req.query, res)
 })
 
+app.get('/getInfo', async (req, res) => {
+    console.log('looking for song');
+    const info = await Utils.getInfo(req.query.url);
+    console.log('song found');
+
+    res.json(info);
+})

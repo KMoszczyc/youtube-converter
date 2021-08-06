@@ -13,12 +13,18 @@
     <div class="main-container">
         <h1>YouTube to MP3 converter</h1>
 
-        <form method="GET" class="convert-form">
-            <input type="text" name="url" id="url-text-input" placeholder="Paste your youtube url here..">
-            <input type="submit" class="btn" id="submit-btn" name="submit" value="Convert">
-        </form>
+        <div id="url-form-container">
+            <p class="error-box" id="url-error-box">
+                Sorry, the url you provided is incorrect!
+            </p>
+            <form method="GET" class="convert-form">
+                <input type="text" name="url" id="url-text-input" placeholder="Paste your youtube url here..">
+                <input type="submit" class="btn" id="submit-btn" name="submit" value="Find">
+            </form>
+        </div>
+     
         
-        <div class="lds-ring" id="lds-ring"><div></div><div></div><div></div><div></div></div>
+        <div class="loading-ring" id="get-info-ring"><div></div><div></div><div></div><div></div></div>
         
         <div id="download-container">
             <div id="img-container">
@@ -30,6 +36,22 @@
                     <li id="artist">Tove Lo</li>
                     <li id="song-duration">05:22</li>
                 </ul>
+
+                <select class="custom-select" name="bitrate-select" id="bitrate-select">
+                    <optgroup label="mp3">
+                        <option value="64k">mp3 64kbps</option>
+                        <option value="128k">mp3 128kbps</option>
+                        <option value="192k">mp3 192kbps</option>
+                        <option value="256k">mp3 256kbps</option>
+                        <option value="320k">mp3 320kbps</option>
+                    </optgroup>
+                </select>
+
+                <div class="loading-ring" id="convert-ring"><div></div><div></div><div></div><div></div></div>
+
+
+                <button class="btn" id="convert-btn">Convert</button>
+                
                 <a id="download-btn" download href="" target="_blank">
                     <button class="btn">Download</button>
                 </a>

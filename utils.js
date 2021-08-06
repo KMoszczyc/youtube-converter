@@ -17,6 +17,8 @@ async function getInfo(url){
     if(!videoID)
         videoID = usefullPart.split('youtu.be/')[1]
 
+    console.log('videoID: ', videoID)
+
     let info = null
     try {
         info = await ytdl.getBasicInfo(videoID);

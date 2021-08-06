@@ -30,5 +30,6 @@ app.get('/getInfo', async (req, res) => {
     const info = await Utils.getInfo(req.query.url);
     console.log('song found');
 
+    res.setHeader("Access-Control-Allow-Origin", "*")
     res.json(info);
 })

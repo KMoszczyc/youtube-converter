@@ -1,21 +1,38 @@
-  
+@import url("https://fonts.googleapis.com/css2?family=Prompt:wght@300&display=swap");
+
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --primary-color: #f44336;
+}
+
 body{
   background-color: #eee;
   color: #333;
-  font: normal 16px Arial, Helvetica, sans-serif;    
+  font-family:  "Prompt", sans-serif; 
  
   line-height: 1.5; /* distance between one line of text and the next*/
   display:flex; 
   flex-direction:column; 
   align-items: center;
-  height:100vh;
   margin: 0;
   padding: 0;
 }
 
+header {
+  background-color: var(--primary-color);
+  width: 100%;
+  color: #fff;
+  text-align: center;
+  font-size: 1.5rem;
+  font-family:  "Prompt", sans-serif;
+}
+
 footer{
-  background-color: #ffffff;
-  max-width: 1140px;
+  background-color: var(--primary-color);
+  color: #fff;
   text-align: center;
   padding: 20px;
 
@@ -23,15 +40,25 @@ footer{
   width: 100%;
 }
 
-h1 {
-  color: #000;
-  text-align: center;
-  line-height: 1.4;
-  padding: 20px;
-}
 
 h3 {
   text-align: center;
+}
+
+.spacer {
+  aspect-ratio: 960/150;
+  width: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.layer {
+  background-image: url("./layer.svg");
+}
+
+.flip {
+  transform: rotate(180deg);
 }
 
 .main-container{
@@ -52,6 +79,7 @@ h3 {
   flex-direction: row; 
   margin-top: 50px;
   border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
 }
 
 #thumbnail_img{
@@ -66,10 +94,10 @@ h3 {
 }
 
 #download-info-container{
-  padding: 10px 40px;
+  max-width: 400px;
+  padding: 20px 40px;
   display: flex;
   flex-direction: column;
-  border-radius: 8px;
 }
 
 .song-info-list{
@@ -137,11 +165,12 @@ option{
   margin-bottom: 20px;
 }
 
-.info-container > div {
+.card {
   background-color: #ffffff;
   margin: 10px;
   padding: 20px;
   border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
 }
 
 #url-form-container{
@@ -164,7 +193,6 @@ option{
   border-radius: 4px;
   box-sizing: border-box;
 }
-
 
 .convert-form{
   width: 100%;
@@ -191,7 +219,7 @@ option{
 .btn{
   /* width: 150px; */
   width: 100%;
-  background-color: #f44336;
+  background-color: var(--primary-color);
   color:#fff;
   font-size: 20px;
   padding: 19px;
@@ -235,7 +263,7 @@ option{
     border: 5px solid #fff;
     border-radius: 50%;
     animation: loading-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-    border-color: #f44336 transparent transparent transparent;
+    border-color: var(--primary-color) transparent transparent transparent;
   }
   .loading-ring div:nth-child(1) {
     animation-delay: -0.45s;
@@ -256,27 +284,6 @@ option{
   }
 
   
-
-/* @media screen and (max-width: 700px) {
-  .info-container {
-    flex-direction: column;
-  }
-
-  .convert-form {
-    flex-direction: column;
-    width: 100%;
-  }
-
-  #url-text-input{
-    margin-right: 0px;
-    margin-bottom: 10px;
-  }
-
-  .btn {
-    width: 100%;
-  }
-} */
-
 @media screen and (max-width: 800px) {
   .info-container {
     flex-direction: column;
@@ -304,9 +311,9 @@ option{
     flex-direction: column; 
   }
 
-  /* #download-info-container{
-    margin-left: 0px;
-  } */
+  #download-info-container{
+    max-width: none;
+  }
 
   #img-container{
     margin: 20px 20px 0 20px;

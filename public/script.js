@@ -18,7 +18,6 @@ const url_text_input = document.getElementById("url-text-input")
 const get_info_ring = document.getElementById("get-info-ring")
 const convert_ring = document.getElementById("convert-ring")
 
-
 const convert_btn = document.getElementById("convert-btn")
 const download_btn = document.getElementById("download-btn")
 const thumbnail_img = document.getElementById("thumbnail_img")

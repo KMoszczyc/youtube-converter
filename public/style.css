@@ -26,17 +26,20 @@ header {
   width: 100%;
   color: #fff;
   text-align: center;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   font-family:  "Prompt", sans-serif;
+}
+h1 {
+  margin: 0;
+  padding-top: 20px;
 }
 
 footer{
   background-color: var(--primary-color);
   color: #fff;
   text-align: center;
-  padding: 20px;
+  padding-bottom: 20px;
 
-  margin-top:auto; 
   width: 100%;
 }
 

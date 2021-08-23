@@ -6,6 +6,7 @@ YouTube mp3 converter with frontend in Vanilla JS, CSS, HTML and backend in Node
 - Chooseable bitrate 64-320 kbps
 - Adds thumbnail, artist and song title to mp3 meta-tags 
 - Fully responsive UI
+- Supports multiple multiple requests simultaneously
 
 ## Instruction
 - Paste youtube link of desired song to the text area  

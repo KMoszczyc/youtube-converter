@@ -17,5 +17,5 @@ YouTube mp3 converter with frontend in Vanilla JS, CSS, HTML and backend in Node
 ## Views
 
 ### PC
-![ytconverter](https://user-images.githubusercontent.com/61971053/130526230-2ff48ae0-ad51-420a-b939-8acc2afd26b8.gif)
+![ytconverter](https://user-images.githubusercontent.com/61971053/130526310-fda2fea3-57d1-4a26-87c8-8699ee659606.gif)
 

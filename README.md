@@ -1,14 +1,14 @@
 # youtube-converter
 YouTube mp3 converter with frontend in Vanilla JS, CSS, HTML and backend in Node.js and Express.js.
 
-## Features
+## Features 🎉
 - YouTube video to mp3 conversion
 - Chooseable bitrate 64-320 kbps
 - Adds thumbnail, artist and song title to mp3 meta-tags 
 - Fully responsive UI
 - Supports multiple multiple requests simultaneously
 
-## Instruction
+## Instruction 📄
 Go to
 💻 https://ytmp3-converter.herokuapp.com/
 
@@ -17,7 +17,7 @@ Go to
 - Click 'Download'  
 - Enjoy!  
 
-## Example usage
+## Example usage 📷
 
 <div align="center">
   <h3>PC</h3>

@@ -17,7 +17,7 @@ Go to
 - Click 'Download'  
 - Enjoy!  
 
-## Views
+## Example usage
 
 <div align="center">
   <h3>PC</h3>

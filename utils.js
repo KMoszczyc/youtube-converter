@@ -7,7 +7,6 @@ const ffmpeg = require('ffmpeg-static');
 const cp = require('child_process');
 
 String.prototype.replaceAll = function replaceAll(search, replace) { return this.split(search).join(replace); }
-const dirPath= 'data/'
 
 async function getInfo(url){
     const usefullPart = url.split('&list=')[0]
@@ -42,10 +41,12 @@ async function getInfo(url){
 
     // removes parentheses and square brackets
     songTitle = songTitle.replace(/ *\([^)]*\) */g, "").replace(/ *\[[^\]]*]/g, '');;
-    let songPath =`${artist}-${songTitle}`
-    songPath = dirPath + clearText(songPath).replaceAll(' ', '_') + '.mp3'
+    let filename =`${artist}-${songTitle}`
+    filename =  clearText(filename).replaceAll(' ', '_') + '.mp3'
 
-    return {artist, songTitle, fullTitle, songPath, thumbnailUrl, songUrl: url, duration: secondsToTime(info.videoDetails.lengthSeconds), error: ""}
+    const sessionID = generateSessionID(32)
+
+    return {artist, songTitle, fullTitle, filename, thumbnailUrl, songUrl: url, duration: secondsToTime(info.videoDetails.lengthSeconds), sessionID, error: ""}
 }
 
 function clearText(text) {
@@ -53,12 +54,12 @@ function clearText(text) {
 	return source.replace(/[[/\]{}()*+?.,\\^$|#\"]/g, '');
 }
 
-async function downloadThumbnail(thumbnailUrl){
+async function downloadThumbnail(info){
     console.log('Thumbnail download started')
 
     const options = {
-        url: thumbnailUrl,
-        dest: dirPath+'thumbnail.jpg'               
+        url: info.thumbnailUrl,
+        dest: info.sessionDir+'thumbnail.jpg'               
     }
 
     const filenameOB = await download.image(options)
@@ -78,17 +79,15 @@ function setTags(image_path, info){
     console.log('Tags are set')
 }
 
-const convertWebmToMp3 = (songPath, bitrate) => { 
+const convertWebmToMp3 = (info) => { 
     return new Promise((resolve, reject) => {
         console.log('conversion started!')
         const ffmpegProcess =  cp.spawn(ffmpeg, [
             '-i',
-            dirPath+'ytsong.webm',
-            // '-acodec',
-            // 'libmp3lame', 
+            info.sessionDir+'ytsong.webm',
             '-b:a',
-            bitrate,
-            songPath
+            info.bitrate,
+            info.songPath
         ]);
 
         ffmpegProcess.on('close', () => {
@@ -99,9 +98,10 @@ const convertWebmToMp3 = (songPath, bitrate) => {
 }
 
 async function downloadSong(info, res){
-    clearData();
+    createDir(info.sessionDir)
     console.log(info)
-    ytdl(info.songUrl, { quality: 'highestaudio' }).pipe(fs.createWriteStream(dirPath+'ytsong.webm')).on("finish", () => {
+
+    ytdl(info.songUrl, { quality: 'highestaudio' }).pipe(fs.createWriteStream(info.sessionDir+'ytsong.webm')).on("finish", () => {
         console.log("Song download finished!");
         preprocessSong(info)
             .then((info) => {
@@ -109,30 +109,21 @@ async function downloadSong(info, res){
                 console.log(fs.existsSync(info.songPath))
 
                 res.set({
-                    // 'Content-disposition': 'attachment; filename=' + filename,
                     "Access-Control-Allow-Origin": "*",
-                    // "Content-Type": "application/force-download",
                 })
-                // res.setHeader("Access-Control-Allow-Origin", "*")
-                // "Content-Type": "application/force-download"
-                // fs.createReadStream(songPath).pipe(res);
                 res.json(info)
             })
     });
 }
 
 async function preprocessSong(info){
-    await convertWebmToMp3(info.songPath, info.bitrate);
-    // fs.renameSync('ytsong.mp3', 'renamed.mp3');
+    await convertWebmToMp3(info);
 
-    const imagePath = await downloadThumbnail(info.thumbnailUrl);
+    const imagePath = await downloadThumbnail(info);
     setTags(imagePath, info)
     console.log(info.songPath);
-    return info
-}
 
-function clearData(){
-    fsExtra.emptyDirSync(dirPath)
+    return info
 }
 
 function secondsToTime(secondsStr) {
@@ -145,6 +136,23 @@ function secondsToTime(secondsStr) {
         timeStr = timeStr.substring(1, timeStr.length);
 
     return timeStr;
+}
+
+
+function generateSessionID(len) {
+    const charSet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let id = '';
+    for (let i = 0; i < len; i++) {
+        var randomPoz = Math.floor(Math.random() * charSet.length);
+        id += charSet.substring(randomPoz,randomPoz+1);
+    }
+    return id;
+}
+
+function createDir(dir){
+    if (!fs.existsSync(dir)){
+        fs.mkdirSync(dir);
+    }
 }
 
 module.exports = {

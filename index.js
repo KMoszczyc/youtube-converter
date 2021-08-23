@@ -1,12 +1,13 @@
 const express = require('express')
 const path = require('path');
+const fs = require('fs');
 
 const Utils = require("./utils");
 
 const app = express()
 const port = process.env.PORT || 3000
 
-app.use('/data',express.static(path.join(__dirname, 'data')));
+app.use('/data', express.static(path.join(__dirname, 'data')));
 app.use(express.static(__dirname+"/public"))
 
 console.log(__dirname)
@@ -20,11 +21,25 @@ app.listen(port, () => {
 // })
 
 
+// download and convert song with selected bitrate
+// every download request creates session directory that gets deleted after a minute
 app.get('/download', async (req, res) => {
     console.log('download started')
-    await Utils.downloadSong(req.query, res)
+
+    const sessionDir = `data/${req.query.sessionID}/`
+    // app.use(`/data-${req.query.sessionID}`, express.static(path.join(__dirname, sessionDir)));
+    setTimeout(() => {
+        fs.rmdirSync(sessionDir, { recursive: true });
+    }, 60 * 1000)
+
+    let info = req.query;
+    info["songPath"] = sessionDir+info.filename;
+    info["sessionDir"] = sessionDir;
+
+    await Utils.downloadSong(info, res)
 })
 
+// get song info
 app.get('/getInfo', async (req, res) => {
     console.log('looking for song');
     const info = await Utils.getInfo(req.query.url);

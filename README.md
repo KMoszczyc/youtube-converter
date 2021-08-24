@@ -14,6 +14,7 @@ Go to
 
 - Paste youtube link of desired song to the text area  
 - Click 'Convert' and wait for download button to pop up  
+- Choose bitrate
 - Click 'Download'  
 - Enjoy!  
 

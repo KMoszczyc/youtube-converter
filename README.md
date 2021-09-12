@@ -1,26 +1,34 @@
 # youtube-converter
 YouTube mp3 converter with frontend in Vanilla JS, CSS, HTML and backend in Node.js and Express.js.
 
-## Features
+## Features 🎉
 - YouTube video to mp3 conversion
 - Chooseable bitrate 64-320 kbps
 - Adds thumbnail, artist and song title to mp3 meta-tags 
 - Fully responsive UI
 - Supports multiple multiple requests simultaneously
 
-## Instruction
+## Instruction 📄
+Go to
+💻 https://ytmp3-converter.herokuapp.com/  
+(it may take a few seconds as heroku dynos go to sleep mode if unused for a while)
+
 - Paste youtube link of desired song to the text area  
 - Click 'Convert' and wait for download button to pop up  
+- Choose bitrate
 - Click 'Download'  
 - Enjoy!  
 
-## Views
+## Example usage 📷
 
-#### Default view - PC
-![image](https://user-images.githubusercontent.com/61971053/127928021-f2f5ead1-046a-4eb9-a75d-55aae0083a50.png)  
+<div align="center">
+  <h3>PC</h3>
+  <img src="https://user-images.githubusercontent.com/61971053/130526310-fda2fea3-57d1-4a26-87c8-8699ee659606.gif" alt="animated" />
+</div>
 
-#### After conversion view - PC
-![image](https://user-images.githubusercontent.com/61971053/127928135-3851a244-74f7-46ee-978f-e6cc7dcc551c.png)  
+<div align="center">
+  <h3>Mobile</h3>
+  <img src="https://user-images.githubusercontent.com/61971053/130527180-3d81e063-ca35-43be-9a65-92094500c9a4.gif" alt="animated" />
+</div
 
-#### After conversion view - Mobile
-![image](https://user-images.githubusercontent.com/61971053/127928295-d19db728-7c21-46b8-aff8-3ff3c7472034.png)
+

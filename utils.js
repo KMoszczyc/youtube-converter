@@ -46,7 +46,7 @@ async function getInfo(url){
 
     const sessionID = generateSessionID(32)
 
-    return {artist, songTitle, fullTitle, filename, thumbnailUrl, songUrl: url, duration: info.videoDetails.lengthSeconds, sessionID, error: ""}
+    return {artist, songTitle, fullTitle, filename, thumbnailUrl, songUrl: url, duration: parseInt(info.videoDetails.lengthSeconds), sessionID, error: ""}
 }
 
 function clearText(text) {

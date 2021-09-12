@@ -50,7 +50,6 @@ window.onload = () => {
 }
 
 function hideCutTimeErrorBox() {
-    console.log('focused')
     song_cut_time_error_box.style.display="none"
 }
 
@@ -76,7 +75,6 @@ async function getSongInfo(e){
     let res = await fetch(full_url)
     let data = await res.json()
     songInfo = data
-    console.log(data)
 
     if(data.error!=""){
         url_text_input.value = ""
@@ -108,17 +106,17 @@ async function convertSong(){
     songInfo['start_time'] = 0
     songInfo['end_time'] = songInfo.duration
 
+    song_cut_time_error_box.style.display="none"
+
     if(song_start_input.value!="")
         songInfo['start_time'] = isoToSeconds(song_start_input.value)
 
     if(song_end_input.value!="")
         songInfo['end_time'] = isoToSeconds(song_end_input.value)
 
-    if(song_cut_time_error_box.style.display!="none")
+    if(!(song_cut_time_error_box.style.display=="" || song_cut_time_error_box.style.display=="none"))
         return
 
-
-    console.log(songInfo)
     const full_url = download_endpoint+'?'+ new URLSearchParams(songInfo)
 
     convert_ring.style.display = "block"

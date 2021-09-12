@@ -33,6 +33,20 @@
         <div id="download-container">
             <div id="img-container">
                 <img id="thumbnail_img" src="" alt="thumbnail" width="600" >
+                
+                <p class="error-box" id="song-cut-time-error-box">
+                    Wrong start or end time provided!
+                </p>
+                <form class="song-cut-form">
+                    <div>
+                        <p>Start</p>
+                        <input type="text" name="song-start" id="song-start-input" placeholder="0:00">
+                    </div>
+                    <div>
+                        <p>End</p>
+                        <input type="text" name="song-end" id="song-end-input" placeholder="0:00">
+                    </div>
+                </form>
             </div>
             <div id="download-info-container">
                 <ul class="song-info-list">

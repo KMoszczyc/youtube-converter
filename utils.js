@@ -46,7 +46,7 @@ async function getInfo(url){
 
     const sessionID = generateSessionID(32)
 
-    return {artist, songTitle, fullTitle, filename, thumbnailUrl, songUrl: url, duration: secondsToTime(info.videoDetails.lengthSeconds), sessionID, error: ""}
+    return {artist, songTitle, fullTitle, filename, thumbnailUrl, songUrl: url, duration: info.videoDetails.lengthSeconds, sessionID, error: ""}
 }
 
 function clearText(text) {
@@ -85,6 +85,10 @@ const convertWebmToMp3 = (info) => {
         const ffmpegProcess =  cp.spawn(ffmpeg, [
             '-i',
             info.sessionDir+'ytsong.webm',
+            '-ss',
+            info.start_time,
+            '-t',
+            info.end_time - info.start_time,
             '-b:a',
             info.bitrate,
             info.songPath

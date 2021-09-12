@@ -18,6 +18,10 @@ const url_text_input = document.getElementById("url-text-input")
 const get_info_ring = document.getElementById("get-info-ring")
 const convert_ring = document.getElementById("convert-ring")
 
+const song_start_input = document.getElementById("song-start-input")
+const song_end_input = document.getElementById("song-end-input")
+
+
 const convert_btn = document.getElementById("convert-btn")
 const download_btn = document.getElementById("download-btn")
 const thumbnail_img = document.getElementById("thumbnail_img")
@@ -29,6 +33,7 @@ const song_duration = document.getElementById("song-duration")
 const bitrate_select = document.getElementById('bitrate-select');
 
 const url_error_box = document.getElementById("url-error-box")
+const song_cut_time_error_box = document.getElementById("song-cut-time-error-box")
 
 let songInfo = null
 
@@ -39,6 +44,14 @@ window.onload = () => {
     form.addEventListener("submit", getSongInfo, false);
     download_btn.onclick = clearDataAfterDownload
     convert_btn.onclick = convertSong
+
+    song_start_input.addEventListener('focus', hideCutTimeErrorBox);
+    song_end_input.addEventListener('focus', hideCutTimeErrorBox);
+}
+
+function hideCutTimeErrorBox() {
+    console.log('focused')
+    song_cut_time_error_box.style.display="none"
 }
 
 async function getSongInfo(e){
@@ -81,7 +94,8 @@ async function getSongInfo(e){
     download_container.style.display = "flex"
     artist.innerHTML = data.artist
     song_title.innerHTML = data.songTitle
-    song_duration.innerHTML = data.duration
+    song_duration.innerHTML = secondsToTime(data.duration)
+    song_end_input.placeholder = secondsToTime(data.duration)
 
     // window.open(`${server_endpoint}${data.song}`);
     // download_btn.href = `${server_endpoint}${data.songPath}`
@@ -91,6 +105,20 @@ async function getSongInfo(e){
 
 async function convertSong(){
     songInfo['bitrate'] = bitrate_select.options[bitrate_select.selectedIndex].value;
+    songInfo['start_time'] = 0
+    songInfo['end_time'] = songInfo.duration
+
+    if(song_start_input.value!="")
+        songInfo['start_time'] = isoToSeconds(song_start_input.value)
+
+    if(song_end_input.value!="")
+        songInfo['end_time'] = isoToSeconds(song_end_input.value)
+
+    if(song_cut_time_error_box.style.display!="none")
+        return
+
+
+    console.log(songInfo)
     const full_url = download_endpoint+'?'+ new URLSearchParams(songInfo)
 
     convert_ring.style.display = "block"
@@ -112,6 +140,8 @@ function clearDataAfterDownload(){
     url_text_input.value = ""
     download_btn.style.display = "none"
     convert_btn.style.display = "block"
+    song_start_input.value=""
+    song_end_input.value=""
 }
 
 function clearData(){
@@ -143,3 +173,42 @@ async function blobNDownload(res){
     link.click();
 }
 
+
+function secondsToTime(secondsStr) {
+    let seconds = parseInt(secondsStr)
+    let timeStr = new Date(seconds * 1000).toISOString().substr(11, 8);
+    if (seconds < 3600) 
+        timeStr = timeStr.substring(3, timeStr.length);
+
+    if (seconds < 600) 
+        timeStr = timeStr.substring(1, timeStr.length);
+
+    return timeStr;
+}
+
+function isoToSeconds(isoTime) {
+    console.log(isoTime)
+    let [minutes, seconds] = isoTime.split(':')
+
+    try {
+        minutes = parseInt(minutes, 10)
+        seconds = parseInt(seconds, 10)
+
+        if(isTimeCorrect(minutes) && isTimeCorrect(seconds)){
+            const time = minutes*60 + seconds
+            if(time <= songInfo.duration)
+                return minutes*60 + seconds
+        }
+    } 
+    catch(error) {
+        console.log(error)
+    } 
+
+    song_cut_time_error_box.style.display="block"
+    song_start_input.value=""
+    song_end_input.value=""
+}
+
+function isTimeCorrect(time){
+    return time>=0 && time<60
+}

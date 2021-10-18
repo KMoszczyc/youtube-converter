@@ -1,6 +1,7 @@
 const express = require('express')
 const path = require('path');
 const fs = require('fs');
+const ytdl = require('ytdl-core');
 
 const Utils = require("./utils");
 
@@ -27,10 +28,9 @@ app.get('/download', async (req, res) => {
     console.log('download started')
 
     const sessionDir = `data/${req.query.sessionID}/`
-    // app.use(`/data-${req.query.sessionID}`, express.static(path.join(__dirname, sessionDir)));
     setTimeout(() => {
         fs.rmdirSync(sessionDir, { recursive: true });
-    }, 60 * 1000)
+    }, 180 * 1000)
 
     let info = req.query;
     info["songPath"] = sessionDir+info.filename;

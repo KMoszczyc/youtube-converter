@@ -20,7 +20,11 @@ async function getInfo(url){
 
     let info = null
     try {
-        info = await ytdl.getBasicInfo(videoID);
+        info = await ytdl.getInfo(videoID);
+        console.log('Format found! low quality', ytdl.chooseFormat(info.formats, { quality: 'lowestvideo', filter: format => format.container === 'mp4'}));
+        console.log('Format found! high quality', ytdl.chooseFormat(info.formats, { quality: 'highestvideo', filter: format => format.container === 'mp4' }));
+
+        
     }
     catch(err){
         console.log(err)
@@ -79,12 +83,12 @@ function setTags(image_path, info){
     console.log('Tags are set')
 }
 
-const convertWebmToMp3 = (info) => { 
+const convertWebmToMp3 = (info, currentPath) => { 
     return new Promise((resolve, reject) => {
         console.log('conversion started!')
         const ffmpegProcess =  cp.spawn(ffmpeg, [
             '-i',
-            info.sessionDir+'ytsong.webm',
+            currentPath,
             '-ss',
             info.start_time,
             '-t',
@@ -101,27 +105,65 @@ const convertWebmToMp3 = (info) => {
     });
 }
 
+const convertWebmToMp4 = (info, currentPath) => { 
+    return new Promise((resolve, reject) => {
+        console.log('conversion started!')
+        const ffmpegProcess =  cp.spawn(ffmpeg, [
+            '-i',
+            currentPath,
+            // '-ss',
+            // info.start_time,
+            // '-t',
+            // info.end_time - info.start_time,
+            info.songPath
+        ]);
+
+        ffmpegProcess.on('close', () => {
+            console.log('conversion done');
+            resolve()
+        });
+    });
+}
+
+
 async function downloadSong(info, res){
     createDir(info.sessionDir)
     console.log(info)
 
-    ytdl(info.songUrl, { quality: 'highestaudio' }).pipe(fs.createWriteStream(info.sessionDir+'ytsong.webm')).on("finish", () => {
-        console.log("Song download finished!");
-        preprocessSong(info)
-            .then((info) => {
-                console.log('info', info.songPath)
-                console.log(fs.existsSync(info.songPath))
-
+    if(info.fileType=='mp4'){
+        const currentPath = info.sessionDir + `ytvideo.mp4`
+        const songPath = info.sessionDir + `${info.fullTitle.replaceAll(' ', '_') }.mp4`
+        ytdl(info.songUrl, { quality: info.bitrate, filter: format => format.container === 'mp4'}).pipe(fs.createWriteStream(currentPath)).on("finish", () => {
+            console.log("Song download finished!");
+            
+            info.songPath = songPath
+            convertWebmToMp4(info, currentPath).then(() => {
                 res.set({
                     "Access-Control-Allow-Origin": "*",
                 })
                 res.json(info)
             })
-    });
+        });
+    }
+    else if(info.fileType=='mp3') {
+        // if its mp3
+        const currentPath = info.sessionDir+'ytsong.webm'
+
+        ytdl(info.songUrl, { quality: 'highestaudio' }).pipe(fs.createWriteStream(currentPath)).on("finish", () => {
+            console.log("Song download finished!");
+            preprocessSong(info, currentPath)
+                .then((info) => {
+                    res.set({
+                        "Access-Control-Allow-Origin": "*",
+                    })
+                    res.json(info)
+                })
+        });
+    }
 }
 
-async function preprocessSong(info){
-    await convertWebmToMp3(info);
+async function preprocessSong(info, currentPath){
+    await convertWebmToMp3(info, currentPath);
 
     const imagePath = await downloadThumbnail(info);
     setTags(imagePath, info)

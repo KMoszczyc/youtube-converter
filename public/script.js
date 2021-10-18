@@ -1,15 +1,15 @@
 var browser = browser || chrome
 
 // heroku endpoints
-const server_endpoint = 'https://ytmp3-converter.herokuapp.com/'
-const download_endpoint = 'https://ytmp3-converter.herokuapp.com/download/'
-const get_info_endpoint = 'https://ytmp3-converter.herokuapp.com/getInfo/'
+// const server_endpoint = 'https://ytmp3-converter.herokuapp.com/'
+// const download_endpoint = 'https://ytmp3-converter.herokuapp.com/download/'
+// const get_info_endpoint = 'https://ytmp3-converter.herokuapp.com/getInfo/'
 
 
 // locally
-// const server_endpoint = 'http://localhost:3000/'
-// const download_endpoint = 'http://localhost:3000/download/'
-// const get_info_endpoint = 'http://localhost:3000/getInfo/'
+const server_endpoint = 'http://localhost:3000/'
+const download_endpoint = 'http://localhost:3000/download/'
+const get_info_endpoint = 'http://localhost:3000/getInfo/'
 
 
 const submit_btn = document.getElementById("submit-btn")
@@ -102,7 +102,8 @@ async function getSongInfo(e){
 }
 
 async function convertSong(){
-    songInfo['bitrate'] = bitrate_select.options[bitrate_select.selectedIndex].value;
+    songInfo['fileType'] = bitrate_select.options[bitrate_select.selectedIndex].value.split(' ')[0];
+    songInfo['bitrate'] = bitrate_select.options[bitrate_select.selectedIndex].value.split(' ')[1];
     songInfo['start_time'] = 0
     songInfo['end_time'] = songInfo.duration
 

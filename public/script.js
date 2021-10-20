@@ -4,7 +4,7 @@ var browser = browser || chrome
 const server_endpoint = 'https://ytmp3-converter.herokuapp.com/'
 const download_endpoint = 'https://ytmp3-converter.herokuapp.com/download/'
 const get_info_endpoint = 'https://ytmp3-converter.herokuapp.com/getInfo/'
-
+const wakeup_dlp_endpoint = 'https://yt-dlp-back.herokuapp.com/wakeup'
 
 // locally
 // const server_endpoint = 'http://localhost:3000/'
@@ -20,7 +20,6 @@ const convert_ring = document.getElementById("convert-ring")
 
 const song_start_input = document.getElementById("song-start-input")
 const song_end_input = document.getElementById("song-end-input")
-
 
 const convert_btn = document.getElementById("convert-btn")
 const download_btn = document.getElementById("download-btn")
@@ -47,6 +46,8 @@ window.onload = () => {
 
     song_start_input.addEventListener('focus', hideCutTimeErrorBox);
     song_end_input.addEventListener('focus', hideCutTimeErrorBox);
+
+    fetch(wakeup_dlp_endpoint)
 }
 
 function hideCutTimeErrorBox() {

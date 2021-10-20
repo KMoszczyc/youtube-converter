@@ -5,8 +5,12 @@ const NodeID3 = require('node-id3')
 const download = require('image-downloader')
 const ffmpeg = require('ffmpeg-static');
 const cp = require('child_process');
+const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
+const { default: axios } = require('axios');
 
 String.prototype.replaceAll = function replaceAll(search, replace) { return this.split(search).join(replace); }
+
+const ytdlp_endpoint = 'https://yt-dlp-back.herokuapp.com/download'
 
 async function getInfo(url){
     const usefullPart = url.split('&list=')[0]
@@ -105,8 +109,33 @@ async function downloadSong(info, res){
     createDir(info.sessionDir)
     console.log(info)
 
-    ytdl(info.songUrl, { quality: 'highestaudio' }).pipe(fs.createWriteStream(info.sessionDir+'ytsong.webm')).on("finish", () => {
-        console.log("Song download finished!");
+    // ytdl-core version - too slow becouse google sucks :(
+    // ytdl(info.songUrl, { quality: 'highestaudio' }).pipe(fs.createWriteStream(info.sessionDir+'ytsong.webm')).on("finish", () => {
+    //     console.log("Song download finished!");
+    //     preprocessSong(info)
+    //         .then((info) => {
+    //             console.log('info', info.songPath)
+    //             console.log(fs.existsSync(info.songPath))
+
+    //             res.set({
+    //                 "Access-Control-Allow-Origin": "*",
+    //             })
+    //             res.json(info)
+    //         })
+    // });
+
+    const request = {
+        url: info.songUrl,
+        sessionDir: info.sessionDir
+    }
+
+    axios({
+        url: ytdlp_endpoint,
+        method: 'POST',
+        responseType: 'stream',
+        data: request
+    }).then(function (response) {
+        response.data.pipe(fs.createWriteStream(`${info.sessionDir}/ytsong.webm`));
         preprocessSong(info)
             .then((info) => {
                 console.log('info', info.songPath)
@@ -117,8 +146,9 @@ async function downloadSong(info, res){
                 })
                 res.json(info)
             })
-    });
+    })
 }
+
 
 async function preprocessSong(info){
     await convertWebmToMp3(info);

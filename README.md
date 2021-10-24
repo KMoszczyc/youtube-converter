@@ -24,7 +24,7 @@ You need to host this repo and https://github.com/KMoszczyc/yt-dlp-back for fast
 yt-dlp doesn't have a npm package, only a python one. That's why a second repo was necessary.
 So first:
 - Deploy https://github.com/KMoszczyc/yt-dlp-back on Heroku
-- Change necessary endpoints in this repo (script.js and in index.js)
+- Change necessary endpoints in this repo (script.js and in utils.js)
 - Deploy this repo
 - Enjoy!
 

@@ -20,7 +20,7 @@ Go to
 - Enjoy!  
 
 ## Heroku Deployment
-You need to host this repo and https://github.com/KMoszczyc/yt-dlp-back for fast youtube download. Ytdl-core is now very slow when it comes to download compared to yt-dlp and
+You need to host this repo and https://github.com/KMoszczyc/yt-dlp-back for fast youtube download. Ytdl-core is now very slow when it comes to downloading compared to yt-dlp and
 yt-dlp doesn't have a npm package, only a python one. That's why a second repo was necessary.
 So first:
 - Deploy https://github.com/KMoszczyc/yt-dlp-back on Heroku

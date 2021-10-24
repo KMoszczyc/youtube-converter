@@ -5,14 +5,12 @@ const NodeID3 = require('node-id3')
 const download = require('image-downloader')
 const ffmpeg = require('ffmpeg-static');
 const cp = require('child_process');
+const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 const { default: axios } = require('axios');
 
 String.prototype.replaceAll = function replaceAll(search, replace) { return this.split(search).join(replace); }
 
-const ytdlp_endpoint = 'https://ytdlpmd.herokuapp.com/download'
-// const ytdlp_endpoint = 'https://yt-dlp-back.herokuapp.com/download'
-// const ytdlp_endpoint = 'http://127.0.0.1:5000/download'
-
+const ytdlp_endpoint = 'https://yt-dlp-back.herokuapp.com/download'
 
 async function getInfo(url){
     const usefullPart = url.split('&list=')[0]

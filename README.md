@@ -14,10 +14,19 @@ Go to
 (it may take a few seconds to load as heroku dynos go to sleep mode if unused for a while)
 
 - Paste youtube link of desired song to the text area  
-- Click 'Convert' and wait for download button to pop up  
 - Choose bitrate
+- Click 'Convert' and wait for download button to pop up  
 - Click 'Download'  
 - Enjoy!  
+
+## Heroku Deployment
+You need to host this repo and https://github.com/KMoszczyc/yt-dlp-back for fast youtube download. Ytdl-core is now very slow when it comes to downloading compared to yt-dlp and
+yt-dlp doesn't have a npm package, only a python one. That's why a second repo was necessary.
+So first:
+- Deploy https://github.com/KMoszczyc/yt-dlp-back on Heroku
+- Change necessary endpoints in this repo (script.js and in utils.js)
+- Deploy this repo
+- Enjoy!
 
 ## Example usage 📷
 

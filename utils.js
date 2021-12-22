@@ -44,9 +44,10 @@ async function getInfo(url){
     }
 
     // removes parentheses and square brackets
-    songTitle = songTitle.replace(/ *\([^)]*\) */g, "").replace(/ *\[[^\]]*]/g, '');;
+    // songTitle = songTitle.replace(/ *\([^)]*\) */g, "").replace(/ *\[[^\]]*]/g, '');
+    songTitle = clearText(songTitle)
     let filename =`${artist}-${songTitle}`
-    filename =  clearText(filename).replaceAll(' ', '_') + '.mp3'
+    filename =  filename.replaceAll(' ', '_') + '.mp3'
 
     const sessionID = generateSessionID(32)
 
@@ -55,7 +56,9 @@ async function getInfo(url){
 
 function clearText(text) {
 	const source = typeof text === 'string' || text instanceof String ? text : '';
-	return source.replace(/[[/\]{}()*+?.,\\^$|#\"]/g, '');
+	// return source.replace(/[[/\]{}()*+?.,\\^$|#\"]/g, '');
+      // removes parentheses and square brackets and special signs
+	return source.replace(/ *\([^)]*\) */g, "").replace(/ *\[[^\]]*]/g, '').replace(/[`~!@#$%^&*()_|+\-=?;:",.<>\{\}\[\]\\\/]/gi, '');;
 }
 
 async function downloadThumbnail(info){

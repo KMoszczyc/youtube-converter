@@ -8,7 +8,7 @@ YouTube mp3 converter with frontend in Vanilla JS, CSS, HTML and backend in Node
 - Fully responsive UI
 - Supports multiple multiple requests simultaneously
 
-## Instruction 📄
+## Usage 📄
 Go to
 💻 https://ytmp3-converter.herokuapp.com/  
 (it may take a few seconds to load as heroku dynos go to sleep mode if unused for a while)

@@ -1,13 +1,6 @@
 # youtube-converter
 YouTube mp3 converter with frontend in Vanilla JS, CSS, HTML and backend in Node.js and Express.js.
 
-## Features 🎉
-- YouTube video to mp3 conversion
-- Chooseable bitrate 64-320 kbps
-- Adds thumbnail, artist and song title to mp3 meta-tags 
-- Fully responsive UI
-- Supports multiple multiple requests simultaneously
-
 ## Usage 📄
 Go to
 💻 https://ytmp3-converter.herokuapp.com/  
@@ -18,6 +11,13 @@ Go to
 - Click 'Convert' and wait for download button to pop up  
 - Click 'Download'  
 - Enjoy!  
+
+## Features 🎉
+- YouTube video to mp3 conversion
+- Chooseable bitrate 64-320 kbps
+- Adds thumbnail, artist and song title to mp3 meta-tags 
+- Fully responsive UI
+- Supports multiple multiple requests simultaneously
 
 ## Heroku Deployment
 You need to host this repo and https://github.com/KMoszczyc/yt-dlp-back for fast youtube download. Ytdl-core is now very slow when it comes to downloading compared to yt-dlp and

@@ -35,17 +35,24 @@ h1 {
 }
 
 footer{
+  display: flex;
   background-color: var(--primary-color);
   color: #fff;
   text-align: center;
+  justify-content: center;
   padding-bottom: 20px;
-
   width: 100%;
+  gap: 10px;
 }
 
 
 h3 {
   text-align: center;
+}
+
+a {
+  color: inherit; /* blue colors for links too */
+  text-decoration: none;
 }
 
 .spacer {

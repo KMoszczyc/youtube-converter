@@ -25,8 +25,11 @@ const download_btn = document.getElementById("download-btn");
 const thumbnail_img = document.getElementById("thumbnail_img");
 const download_container = document.getElementById("download-container");
 
-const artist = document.getElementById("artist");
+const edit_info_btn = document.getElementById("edit-info-btn")
+const save_info_btn = document.getElementById("save-info-btn")
+
 const song_title = document.getElementById("song-title");
+const artist = document.getElementById("artist");
 const song_duration = document.getElementById("song-duration");
 const bitrate_select = document.getElementById("bitrate-select");
 
@@ -41,6 +44,8 @@ window.onload = () => {
     form.addEventListener("submit", getSongInfo, false);
     download_btn.onclick = clearDataAfterDownload;
     convert_btn.onclick = convertSong;
+    edit_info_btn.onclick = onEditInfoClicked
+    save_info_btn.onclick = onSaveInfoClicked
 
     song_start_input.addEventListener("focus", hideCutTimeErrorBox);
     song_end_input.addEventListener("focus", hideCutTimeErrorBox);
@@ -104,6 +109,8 @@ async function convertSong() {
     songInfo["bitrate"] = bitrate_select.options[bitrate_select.selectedIndex].value;
     songInfo["start_time"] = 0;
     songInfo["end_time"] = songInfo.duration;
+    songInfo["songTitle"] = song_title.textContent
+    songInfo["artist"] = artist.textContent
 
     song_cut_time_error_box.style.display = "none";
 
@@ -146,6 +153,25 @@ function clearData() {
     thumbnail_img.src = "";
     convert_btn.style.display = "block";
 }
+
+function onEditInfoClicked(){
+    song_title.setAttribute("contenteditable", true);
+    artist.setAttribute("contenteditable", true);
+    song_title.classList.add('bordered');
+    artist.classList.add('bordered');
+    save_info_btn.style.visibility = "visible"
+
+    song_title.focus()
+}
+
+function onSaveInfoClicked(){
+    song_title.setAttribute("contenteditable", false);
+    artist.setAttribute("contenteditable", false);
+    song_title.classList.remove('bordered');
+    artist.classList.remove('bordered');
+    save_info_btn.style.visibility = "hidden"
+}
+
 
 /**
  * Converts seconds to ISO format - mm:ss

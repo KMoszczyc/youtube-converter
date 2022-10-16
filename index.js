@@ -24,7 +24,7 @@ app.get("/download", async (req, res) => {
 
     const sessionDir = `data/${req.query.sessionID}/`;
     setTimeout(() => {
-        fs.rmdirSync(sessionDir, { recursive: true });
+        fs.rmSync(sessionDir, { recursive: true });
     }, 180 * 1000);
 
     let info = req.query;

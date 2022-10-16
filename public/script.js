@@ -1,15 +1,14 @@
 var browser = browser || chrome;
 
-// heroku deployment endpoints
-const server_endpoint = "https://ytmp3-converter.herokuapp.com/";
-const download_endpoint = "https://ytmp3-converter.herokuapp.com/download/";
-const get_info_endpoint = "https://ytmp3-converter.herokuapp.com/getInfo/";
-const wakeup_dlp_endpoint = "https://yt-dlp-back.herokuapp.com/wakeup";
-
-// local deployment endpoints
+//  host
+const server_endpoint = "https://ytmp3-converter.herokuapp.com"
 // const server_endpoint = 'http://localhost:3000/'
-// const download_endpoint = 'http://localhost:3000/download/'
-// const get_info_endpoint = 'http://localhost:3000/getInfo/'
+
+// endpoints
+const download_endpoint = server_endpoint + "/download/";
+const get_info_endpoint = server_endpoint + "/getInfo/";
+const wakeup_dlp_endpoint = server_endpoint + "/wakeup/";
+
 
 const submit_btn = document.getElementById("submit-btn");
 const url_text_input = document.getElementById("url-text-input");

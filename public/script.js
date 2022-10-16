@@ -7,7 +7,7 @@ const server_endpoint = "https://ytmp3-converter.herokuapp.com"
 // endpoints
 const download_endpoint = server_endpoint + "/download/";
 const get_info_endpoint = server_endpoint + "/getInfo/";
-const wakeup_dlp_endpoint = server_endpoint + "/wakeup/";
+// const wakeup_dlp_endpoint = server_endpoint + "/wakeup/";
 
 
 const submit_btn = document.getElementById("submit-btn");
@@ -49,7 +49,7 @@ window.onload = () => {
     song_start_input.addEventListener("focus", hideCutTimeErrorBox);
     song_end_input.addEventListener("focus", hideCutTimeErrorBox);
 
-    fetch(wakeup_dlp_endpoint);
+    // fetch(wakeup_dlp_endpoint);
 };
 
 /**

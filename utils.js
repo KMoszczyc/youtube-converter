@@ -7,12 +7,21 @@ const ffmpeg = require("ffmpeg-static");
 const cp = require("child_process");
 const fetch = (...args) => import("node-fetch").then(({ default: fetch }) => fetch(...args));
 const { default: axios } = require("axios");
+require('dotenv').config();
 
 String.prototype.replaceAll = function replaceAll(search, replace) {
     return this.split(search).join(replace);
 };
 
 const ytdlp_endpoint = "https://yt-dlp-back.herokuapp.com/download"; // Simple Flask app with yt-dlp package (not available in npm) for song downloading.
+
+const requestOptions = {
+    requestOptions: {
+    headers: {
+      cookie: process.env.COOKIE,
+    },
+  },
+}
 
 /**
  * Downloads song info from youtube api and parses yt title to author and song titile.
@@ -31,7 +40,7 @@ async function getInfo(url) {
 
     let info = null;
     try {
-        info = await ytdl.getBasicInfo(videoID);
+        info = await ytdl.getBasicInfo(videoID, requestOptions);
     } catch (err) {
         console.log(err);
         return { error: "Video with that url doesn't exist!" };
@@ -50,7 +59,6 @@ async function getInfo(url) {
     }
 
     // removes parentheses and square brackets
-    // songTitle = songTitle.replace(/ *\([^)]*\) */g, "").replace(/ *\[[^\]]*]/g, '');
     songTitle = clearText(songTitle);
     let filename = `${artist}-${songTitle}`;
     filename = filename.replaceAll(" ", "_") + ".mp3";
@@ -159,19 +167,20 @@ async function downloadSong(info, res) {
     console.log(info);
 
     // ytdl-core version - too slow becouse google sucks :(
-    ytdl(info.songUrl, { quality: 'highestaudio' }).pipe(fs.createWriteStream(info.sessionDir+'ytsong.webm')).on("finish", () => {
-        console.log("Song download finished!");
-        preprocessSong(info)
-            .then((info) => {
-                console.log('info', info.songPath)
-                console.log(fs.existsSync(info.songPath))
+    ytdl(info.songUrl, { quality: "highestaudio" })
+        .pipe(fs.createWriteStream(info.sessionDir + "ytsong.webm"))
+        .on("finish", () => {
+            console.log("Song download finished!");
+            preprocessSong(info).then((info) => {
+                console.log("info", info.songPath);
+                console.log(fs.existsSync(info.songPath));
 
                 res.set({
                     "Access-Control-Allow-Origin": "*",
-                })
-                res.json(info)
-            })
-    });
+                });
+                res.json(info);
+            });
+        });
 
     // yt-dlp version - External Flask API for yt mp3 download
     // const request = {

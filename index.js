@@ -9,7 +9,8 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 const dataPath = path.join('/tmp', "data")
-createDir(dataPath)
+
+Utils.createDir(dataPath)
 
 app.use("/tmp/data", express.static(dataPath));
 app.use(express.static(__dirname + "/public"));

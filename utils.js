@@ -15,6 +15,7 @@ String.prototype.replaceAll = function replaceAll(search, replace) {
 };
 
 const ytdlp_endpoint = "https://yt-dlp-back.herokuapp.com/download"; // Simple Flask app with yt-dlp package (not available in npm) for song downloading.
+// const ytdlp_endpoint = "http://localhost:5000/download"
 
 /**
  * Downloads song info from youtube api and parses yt title to author and song titile.

@@ -195,8 +195,8 @@ async function downloadSong(info, res) {
         stream.on("close", () => {
             console.log("Raw song.webm download finished!");
             preprocessSong(info).then((info) => {
-                listDir("/tmp/data");
-                listDir(info.sessionDir);
+                listDir('/tmp')
+                listDir(info.sessionDir)
 
                 res.set({
                     "Access-Control-Allow-Origin": "*",
@@ -253,9 +253,11 @@ function createDir(dir) {
     }
 }
 function listDir(dir) {
-    fs.readdirSync(dir).forEach((file) => {
-        console.log(file);
-    });
+    if (!fs.existsSync(dir)) {
+        fs.readdirSync(dir).forEach((file) => {
+            console.log(file);
+        });
+    }
 }
 
 module.exports = {

@@ -8,7 +8,7 @@ const Utils = require("./utils");
 const app = express();
 const port = process.env.PORT || 3000;
 
-const dataPath = os.tmpdir()
+const dataPath = path.join(tmpdir(), 'data')
 
 Utils.createDir(dataPath)
 

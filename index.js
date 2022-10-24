@@ -22,7 +22,7 @@ app.listen(port, () => {
 app.get("/download", async (req, res) => {
     console.log("download started");
 
-    const sessionDir = `data/${req.query.sessionID}/`;
+    const sessionDir = `/tmp/data/${req.query.sessionID}/`;
     setTimeout(() => {
         fs.rmSync(sessionDir, { recursive: true });
     }, 180 * 1000);

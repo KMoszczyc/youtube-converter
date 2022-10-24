@@ -160,44 +160,44 @@ async function downloadSong(info, res) {
     console.log(info);
 
     // ytdl-core version - too slow becouse google sucks :(
-    ytdl(info.songUrl, { quality: "highestaudio" })
-        .pipe(fs.createWriteStream(info.sessionDir + "ytsong.webm"))
-        .on("finish", () => {
-            console.log("Song download finished!");
-            preprocessSong(info).then((info) => {
-                console.log("info", info.songPath);
-                console.log(fs.existsSync(info.songPath));
+    // ytdl(info.songUrl, { quality: "highestaudio" })
+    //     .pipe(fs.createWriteStream(info.sessionDir + "ytsong.webm"))
+    //     .on("finish", () => {
+    //         console.log("Song download finished!");
+    //         preprocessSong(info).then((info) => {
+    //             console.log("info", info.songPath);
+    //             console.log(fs.existsSync(info.songPath));
 
-                res.set({
-                    "Access-Control-Allow-Origin": "*",
-                });
-                res.json(info);
-            });
-        });
+    //             res.set({
+    //                 "Access-Control-Allow-Origin": "*",
+    //             });
+    //             res.json(info);
+    //         });
+    //     });
 
     // yt-dlp version - External Flask API for yt mp3 download
-    // const request = {
-    //     url: info.songUrl,
-    //     sessionDir: info.sessionDir,
-    // };
+    const request = {
+        url: info.songUrl,
+        sessionDir: info.sessionDir,
+    };
 
-    // axios({
-    //     url: ytdlp_endpoint,
-    //     method: "POST",
-    //     responseType: "stream",
-    //     data: request,
-    // }).then(function (response) {
-    //     response.data.pipe(fs.createWriteStream(`${info.sessionDir}/ytsong.webm`));
-    //     preprocessSong(info).then((info) => {
-    //         console.log("info", info.songPath);
-    //         console.log(fs.existsSync(info.songPath));
+    axios({
+        url: ytdlp_endpoint,
+        method: "POST",
+        responseType: "stream",
+        data: request,
+    }).then(function (response) {
+        response.data.pipe(fs.createWriteStream(`${info.sessionDir}/ytsong.webm`));
+        preprocessSong(info).then((info) => {
+            console.log("info", info.songPath);
+            console.log(fs.existsSync(info.songPath));
 
-    //         res.set({
-    //             "Access-Control-Allow-Origin": "*",
-    //         });
-    //         res.json(info);
-    //     });
-    // });
+            res.set({
+                "Access-Control-Allow-Origin": "*",
+            });
+            res.json(info);
+        });
+    });
 }
 
 /**

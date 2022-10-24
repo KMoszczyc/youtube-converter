@@ -2,22 +2,24 @@ const express = require("express");
 const path = require("path");
 const fs = require("fs");
 const ytdl = require("ytdl-core");
-
+const os = require("os");
 const Utils = require("./utils");
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-const dataPath = path.join('/tmp', "data")
+const dataPath = os.tmpdir()
 
 Utils.createDir(dataPath)
 
-app.use("/tmp/data", express.static(dataPath));
+app.use(dataPath, express.static(dataPath));
 app.use(express.static(__dirname + "/public"));
 
 app.listen(port, () => {
     console.log("Server running on port 3000");
 });
+
+
 
 /**
  * Downloads and converts song with selected bitrate.

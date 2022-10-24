@@ -216,7 +216,7 @@ async function downloadSong(info, res) {
 async function preprocessSong(info) {
     await convertWebmToMp3(info);
 
-    const imageDestPath = path.join(__dirname, info.sessionDir, "thumbnail.jpg");
+    const imageDestPath = path.join(info.sessionDir, "thumbnail.jpg");
     await downloadThumbnail(imageDestPath, info);
 
     setTags(imageDestPath, info);

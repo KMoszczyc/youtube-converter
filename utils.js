@@ -246,7 +246,7 @@ function generateSessionID(len) {
  */
 function createDir(dir) {
     if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir);
+        fs.mkdirSync(dir, { recursive: true });
     }
 }
 

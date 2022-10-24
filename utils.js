@@ -261,4 +261,5 @@ function listDir(dir){
 module.exports = {
     downloadSong: downloadSong,
     getInfo: getInfo,
+    createDir: createDir
 };

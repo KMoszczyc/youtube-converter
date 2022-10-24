@@ -8,7 +8,10 @@ const Utils = require("./utils");
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use("/tmp/data", express.static(path.join('/tmp', "data")));
+const dataPath = path.join('/tmp', "data")
+createDir(dataPath)
+
+app.use("/tmp/data", express.static(dataPath));
 app.use(express.static(__dirname + "/public"));
 
 app.listen(port, () => {
@@ -22,13 +25,13 @@ app.listen(port, () => {
 app.get("/download", async (req, res) => {
     console.log("download started");
 
-    const sessionDir = `/tmp/data/${req.query.sessionID}/`;
+    const sessionDir = path.join(dataPath, req.query.sessionID)
     setTimeout(() => {
         fs.rmSync(sessionDir, { recursive: true });
     }, 180 * 1000);
 
     let info = req.query;
-    info["songPath"] = sessionDir + info.filename;
+    info["songPath"] = path.join(sessionDir, info.filename);
     info["sessionDir"] = sessionDir;
 
     await Utils.downloadSong(info, res);

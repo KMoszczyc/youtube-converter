@@ -7,14 +7,14 @@ const ffmpeg = require("ffmpeg-static");
 const cp = require("child_process");
 const fetch = (...args) => import("node-fetch").then(({ default: fetch }) => fetch(...args));
 const { default: axios } = require("axios");
-require('dotenv').config();
+const path = require("path");
+require("dotenv").config();
 
 String.prototype.replaceAll = function replaceAll(search, replace) {
     return this.split(search).join(replace);
 };
 
 const ytdlp_endpoint = "https://yt-dlp-back.herokuapp.com/download"; // Simple Flask app with yt-dlp package (not available in npm) for song downloading.
-
 
 /**
  * Downloads song info from youtube api and parses yt title to author and song titile.
@@ -91,12 +91,12 @@ function clearText(text) {
  * @param {Object} info
  * @returns
  */
-async function downloadThumbnail(info) {
+async function downloadThumbnail(imageDestPath, info) {
     console.log("Thumbnail download started");
 
     const options = {
         url: info.thumbnailUrl,
-        dest: info.sessionDir + "thumbnail.jpg",
+        dest: imageDestPath,
     };
 
     const filenameOB = await download.image(options);
@@ -110,7 +110,7 @@ async function downloadThumbnail(info) {
  * @param {Object} info
  */
 function setTags(image_path, info) {
-    console.log("Setting tags");
+    console.log("Setting tags started");
     const tags = {
         title: info.songTitle,
         artist: info.artist,
@@ -118,7 +118,7 @@ function setTags(image_path, info) {
     };
 
     NodeID3.write(tags, info.songPath, (err) => console.log(err));
-    console.log("Tags are set");
+    console.log("Setting tags finished");
 }
 
 /**
@@ -128,7 +128,7 @@ function setTags(image_path, info) {
  */
 const convertWebmToMp3 = (info) => {
     return new Promise((resolve, reject) => {
-        console.log("conversion started!");
+        console.log("FFMPEG conversion started!");
         const ffmpegProcess = cp.spawn(ffmpeg, [
             "-i",
             info.sessionDir + "ytsong.webm",
@@ -142,7 +142,7 @@ const convertWebmToMp3 = (info) => {
         ]);
 
         ffmpegProcess.on("close", () => {
-            console.log("conversion done");
+            console.log("FFMPEG conversion done");
             resolve();
         });
     });
@@ -187,15 +187,22 @@ async function downloadSong(info, res) {
         responseType: "stream",
         data: request,
     }).then(function (response) {
-        response.data.pipe(fs.createWriteStream(`${info.sessionDir}/ytsong.webm`));
-        preprocessSong(info).then((info) => {
-            console.log("info", info.songPath);
-            console.log(fs.existsSync(info.songPath));
+        console.log("Raw song.webm download started!");
+        let stream = fs.createWriteStream(`${info.sessionDir}/ytsong.webm`);
+        response.data.pipe(stream);
 
-            res.set({
-                "Access-Control-Allow-Origin": "*",
+        stream.on("close", () => {
+            console.log("Raw song.webm download finished!");
+            preprocessSong(info).then((info) => {
+                res.set({
+                    "Access-Control-Allow-Origin": "*",
+                });
+                res.json(info);
             });
-            res.json(info);
+        });
+
+        stream.on("error", function (err) {
+            console.log(err);
         });
     });
 }
@@ -208,8 +215,10 @@ async function downloadSong(info, res) {
 async function preprocessSong(info) {
     await convertWebmToMp3(info);
 
-    const imagePath = await downloadThumbnail(info);
-    setTags(imagePath, info);
+    const imageDestPath = path.join(__dirname, info.sessionDir, "thumbnail.jpg");
+    await downloadThumbnail(imageDestPath, info);
+
+    setTags(imageDestPath, info);
     console.log(info.songPath);
 
     return info;

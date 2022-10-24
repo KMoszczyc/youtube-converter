@@ -8,7 +8,7 @@ const Utils = require("./utils");
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use("/data", express.static(path.join(__dirname, "data")));
+app.use("/tmp/data", express.static(path.join('/tmp', "data")));
 app.use(express.static(__dirname + "/public"));
 
 app.listen(port, () => {

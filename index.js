@@ -8,18 +8,16 @@ const Utils = require("./utils");
 const app = express();
 const port = process.env.PORT || 3000;
 
-const dataPath = path.join(os.tmpdir(), 'data')
+const dataPath = path.join(os.tmpdir(), "data");
 
-Utils.createDir(dataPath)
+Utils.createDir(dataPath);
 
-app.use(dataPath, express.static(dataPath));
+app.use("/data", express.static(dataPath));
 app.use(express.static(__dirname + "/public"));
 
 app.listen(port, () => {
     console.log("Server running on port 3000");
 });
-
-
 
 /**
  * Downloads and converts song with selected bitrate.
@@ -28,14 +26,16 @@ app.listen(port, () => {
 app.get("/download", async (req, res) => {
     console.log("download started");
 
-    const sessionDir = path.join(dataPath, req.query.sessionID)
+    const sessionDir = path.join("data", req.query.sessionID);
+    const fullSessionDirPath = path.join(dataPath, req.query.sessionID);
     setTimeout(() => {
         fs.rmSync(sessionDir, { recursive: true });
     }, 180 * 1000);
 
     let info = req.query;
-    info["songPath"] = path.join(sessionDir, info.filename);
-    info["sessionDir"] = sessionDir;
+    info["endpointSongPath"] = path.join(sessionDir, info.filename);
+    info["songPath"] = path.join(fullSessionDirPath, info.filename);
+    info["fullSessionDirPath"] = fullSessionDirPath;
 
     await Utils.downloadSong(info, res);
 });

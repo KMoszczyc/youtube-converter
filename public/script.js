@@ -3,10 +3,8 @@ var browser = browser || chrome;
 //  host
 // const server_endpoint = "https://youtube-converter.onrender.com"
 // const server_endpoint = "https://ytmp3-converter.herokuapp.com"
-const server_endpoint = "https://cloudy-pig-trench-coat.cyclic.app"
+const server_endpoint = "https://cloudy-pig-trench-coat.cyclic.app";
 // const server_endpoint = "http://localhost:3000";
-
-
 
 // endpoints
 const download_endpoint = server_endpoint + "/download/";
@@ -131,7 +129,7 @@ async function convertSong() {
     //converting ended
 
     download_btn.style.display = "block";
-    download_btn.href = `${server_endpoint}/${data.songPath}`;
+    download_btn.href = `${server_endpoint}/${data.endpointSongPath}`;
     convert_ring.style.display = "none";
 }
 

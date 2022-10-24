@@ -130,9 +130,13 @@ function setTags(image_path, info) {
 const convertWebmToMp3 = (info) => {
     return new Promise((resolve, reject) => {
         console.log("FFMPEG conversion started!");
+        console.log(path.join(info.fullSessionDirPath, "ytsong.webm"))
+        console.log(info.songPath)
+        listDir(info.fullSessionDirPath)
+
         const ffmpegProcess = cp.spawn(ffmpeg, [
             "-i",
-            info.sessionDir + "ytsong.webm",
+            path.join(info.fullSessionDirPath, "ytsong.webm"),
             "-ss",
             info.start_time,
             "-t",
@@ -157,12 +161,12 @@ const convertWebmToMp3 = (info) => {
  * @param {*} res
  */
 async function downloadSong(info, res) {
-    createDir(info.sessionDir);
+    createDir(info.fullSessionDirPath);
     console.log(info);
 
     // ytdl-core version - too slow becouse google sucks :(
     // ytdl(info.songUrl, { quality: "highestaudio" })
-    //     .pipe(fs.createWriteStream(info.sessionDir + "ytsong.webm"))
+    //     .pipe(fs.createWriteStream(info.fullSessionDirPath + "ytsong.webm"))
     //     .on("finish", () => {
     //         console.log("Song download finished!");
     //         preprocessSong(info).then((info) => {
@@ -179,7 +183,7 @@ async function downloadSong(info, res) {
     // yt-dlp version - External Flask API for yt mp3 download
     const request = {
         url: info.songUrl,
-        sessionDir: info.sessionDir,
+        sessionDir: info.fullSessionDirPath,
     };
 
     axios({
@@ -189,14 +193,15 @@ async function downloadSong(info, res) {
         data: request,
     }).then(function (response) {
         console.log("Raw song.webm download started!");
-        let stream = fs.createWriteStream(`${info.sessionDir}/ytsong.webm`);
+        let stream = fs.createWriteStream(path.join(info.fullSessionDirPath, 'ytsong.webm'));
         response.data.pipe(stream);
 
         stream.on("close", () => {
             console.log("Raw song.webm download finished!");
             preprocessSong(info).then((info) => {
+                console.log('-------------------------')
                 listDir('/tmp')
-                listDir(info.sessionDir)
+                listDir(info.fullSessionDirPath)
 
                 res.set({
                     "Access-Control-Allow-Origin": "*",
@@ -219,7 +224,7 @@ async function downloadSong(info, res) {
 async function preprocessSong(info) {
     await convertWebmToMp3(info);
 
-    const imageDestPath = path.join(info.sessionDir, "thumbnail.jpg");
+    const imageDestPath = path.join(info.fullSessionDirPath, "thumbnail.jpg");
     await downloadThumbnail(imageDestPath, info);
 
     setTags(imageDestPath, info);
@@ -254,10 +259,13 @@ function createDir(dir) {
 }
 function listDir(dir) {
     if (!fs.existsSync(dir)) {
-        fs.readdirSync(dir).forEach((file) => {
-            console.log(file);
-        });
+        console.log(dir, 'doesnt exist!')
     }
+
+    fs.readdirSync(dir).forEach((file) => {
+        console.log(file);
+    });
+    
 }
 
 module.exports = {

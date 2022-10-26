@@ -241,9 +241,7 @@ async function preprocessSong(info) {
 }
 
 async function uploadSongToS3Bucket(srcSongPath, dstS3SongPath) {
-    console.log('test1')
     const data = fs.readFileSync(srcSongPath);
-    console.log('test2')
 
     const params = {
         Bucket: BUCKET_NAME,
@@ -257,7 +255,6 @@ async function uploadSongToS3Bucket(srcSongPath, dstS3SongPath) {
             console.log(`File uploaded successfully at ${data.Location}`);
         })
         .promise();
-    console.log('test3')
 }
 
 async function getSignedUrlForDownload(songS3Path) {

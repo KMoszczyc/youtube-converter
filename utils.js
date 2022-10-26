@@ -13,7 +13,7 @@ require("dotenv").config();
 // Temporarly storing mp3 files in AWS S3 bucket
 const AWS = require("aws-sdk");
 const s3 = new AWS.S3();
-const BUCKET_NAME = "cyclic-calm-red-sparrow-gown-eu-west-1";
+const BUCKET_NAME = "cyclic-cloudy-pig-trench-coat-eu-central-1";
 
 String.prototype.replaceAll = function replaceAll(search, replace) {
     return this.split(search).join(replace);
@@ -204,7 +204,7 @@ async function downloadSong(info, res) {
 
     await new Promise(function (resolve, reject) {
         stream.on("close", () => resolve(console.log("Raw song.webm download finished!")));
-        stream.on("error", (err) => console.log(err)); // or something like that. might need to close `hash`
+        stream.on("error", (err) => console.log(err)); 
     });
 
     info = await preprocessSong(info);
@@ -252,8 +252,8 @@ async function uploadSongToS3Bucket(srcSongPath, dstS3SongPath) {
         ContentType: "audio/mpeg",
     };
 
-    await s3.upload(params, function (s3Err, data) {
-            if (s3Err) throw s3Err;
+    await s3.upload(params, function (err, data) {
+            if (err) throw err;
             console.log(`File uploaded successfully at ${data.Location}`);
         })
         .promise();

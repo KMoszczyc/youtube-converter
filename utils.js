@@ -10,7 +10,7 @@ const { default: axios } = require("axios");
 const path = require("path");
 require("dotenv").config();
 
-// Temporarly storing mp3 files in AWS S3 bucket
+// Temporarly storing mp3 files in AWS S3 bucket - Comment out those lines if you'are not using Cyclic.sh 
 const AWS = require("aws-sdk");
 const s3 = new AWS.S3();
 const BUCKET_NAME = "cyclic-cloudy-pig-trench-coat-eu-central-1";
@@ -209,18 +209,21 @@ async function downloadSong(info, res) {
 
     info = await preprocessSong(info);
 
+    // Uncomment if you want to use something else than Cyclic.sh
+    // const presignedUrl = info['endpointSongPath']
+
+    // Comments those lines if you'are not using Cyclic.sh and AWS S3 Bucket
     console.log("Upload mp3 to S3 Bucket");
     const dstS3SongPath = info["endpointSongPath"].replaceAll("\\", "/");
     await uploadSongToS3Bucket(info["songPath"], dstS3SongPath);
-
     console.log("Pre-sign mp3 url");
-    const presignedUrl = await getSignedUrlForDownload(dstS3SongPath);
-    const escapedPresignedUrl = presignedUrl.replaceAll("/", "/");
+    const url = await getSignedUrlForDownload(dstS3SongPath);
+
 
     res.set({
         "Access-Control-Allow-Origin": "*",
     });
-    res.json({ url: escapedPresignedUrl });
+    res.json({ url: presignedUrl });
 }
 
 /**

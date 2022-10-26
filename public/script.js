@@ -132,8 +132,11 @@ async function convertSong() {
     console.log(cleaned_url);
 
     download_btn.style.display = "block";
-    // download_btn.href = `${server_endpoint}/${data.endpointSongPath}`;
+
+    // Uncomment if using something else than Cyclic.sh
+    // download_btn.href = `${server_endpoint}/${cleaned_url}`;
     download_btn.href = cleaned_url;
+
     convert_ring.style.display = "none";
 }
 

@@ -1,7 +1,7 @@
 const fs = require("fs");
 const fsExtra = require("fs-extra");
 const ytdl = require("ytdl-core");
-const NodeID3 = require("node-id3");
+const NodeID3 = require("node-id3").Promise;
 const download = require("image-downloader");
 const ffmpeg = require("ffmpeg-static");
 const cp = require("child_process");
@@ -9,6 +9,11 @@ const fetch = (...args) => import("node-fetch").then(({ default: fetch }) => fet
 const { default: axios } = require("axios");
 const path = require("path");
 require("dotenv").config();
+
+// Temporarly storing mp3 files in AWS S3 bucket
+const AWS = require("aws-sdk");
+const s3 = new AWS.S3();
+const BUCKET_NAME = "cyclic-calm-red-sparrow-gown-eu-west-1";
 
 String.prototype.replaceAll = function replaceAll(search, replace) {
     return this.split(search).join(replace);
@@ -110,7 +115,7 @@ async function downloadThumbnail(imageDestPath, info) {
  * @param {string} image_path
  * @param {Object} info
  */
-function setTags(image_path, info) {
+async function setTags(image_path, info) {
     console.log("Setting tags started");
     const tags = {
         title: info.songTitle,
@@ -118,7 +123,7 @@ function setTags(image_path, info) {
         APIC: image_path,
     };
 
-    NodeID3.write(tags, info.songPath, (err) => console.log(err));
+    await NodeID3.write(tags, info.songPath, (err) => console.log(err));
     console.log("Setting tags finished");
 }
 
@@ -130,9 +135,9 @@ function setTags(image_path, info) {
 const convertWebmToMp3 = (info) => {
     return new Promise((resolve, reject) => {
         console.log("FFMPEG conversion started!");
-        console.log(path.join(info.fullSessionDirPath, "ytsong.webm"))
-        console.log(info.songPath)
-        listDir(info.fullSessionDirPath)
+        console.log(path.join(info.fullSessionDirPath, "ytsong.webm"));
+        console.log(info.songPath);
+        listDir(info.fullSessionDirPath);
 
         const ffmpegProcess = cp.spawn(ffmpeg, [
             "-i",
@@ -186,34 +191,36 @@ async function downloadSong(info, res) {
         sessionDir: info.fullSessionDirPath,
     };
 
-    axios({
+    const ytDlpResponse = await axios({
         url: ytdlp_endpoint,
         method: "POST",
         responseType: "stream",
         data: request,
-    }).then(function (response) {
-        console.log("Raw song.webm download started!");
-        let stream = fs.createWriteStream(path.join(info.fullSessionDirPath, 'ytsong.webm'));
-        response.data.pipe(stream);
-
-        stream.on("close", () => {
-            console.log("Raw song.webm download finished!");
-            preprocessSong(info).then((info) => {
-                console.log('-------------------------')
-                listDir('/tmp')
-                listDir(info.fullSessionDirPath)
-
-                res.set({
-                    "Access-Control-Allow-Origin": "*",
-                });
-                res.json(info);
-            });
-        });
-
-        stream.on("error", function (err) {
-            console.log(err);
-        });
     });
+
+    console.log("Raw song.webm download started!");
+    let stream = fs.createWriteStream(path.join(info.fullSessionDirPath, "ytsong.webm"));
+    ytDlpResponse.data.pipe(stream);
+
+    await new Promise(function (resolve, reject) {
+        stream.on("close", () => resolve(console.log("Raw song.webm download finished!")));
+        stream.on("error", (err) => console.log(err)); // or something like that. might need to close `hash`
+    });
+
+    info = await preprocessSong(info);
+
+    console.log("Upload mp3 to S3 Bucket");
+    const dstS3SongPath = info["endpointSongPath"].replaceAll("\\", "/");
+    await uploadSongToS3Bucket(info["songPath"], dstS3SongPath);
+
+    console.log("Pre-sign mp3 url");
+    const presignedUrl = await getSignedUrlForDownload(dstS3SongPath);
+    const escapedPresignedUrl = presignedUrl.replaceAll("/", "/");
+
+    res.set({
+        "Access-Control-Allow-Origin": "*",
+    });
+    res.json({ url: escapedPresignedUrl });
 }
 
 /**
@@ -227,10 +234,46 @@ async function preprocessSong(info) {
     const imageDestPath = path.join(info.fullSessionDirPath, "thumbnail.jpg");
     await downloadThumbnail(imageDestPath, info);
 
-    setTags(imageDestPath, info);
+    await setTags(imageDestPath, info);
     console.log(info.songPath);
 
     return info;
+}
+
+async function uploadSongToS3Bucket(srcSongPath, dstS3SongPath) {
+    const data = fs.readFileSync(srcSongPath);
+
+    const params = {
+        Bucket: BUCKET_NAME,
+        Key: dstS3SongPath,
+        Body: data,
+        ContentType: "audio/mpeg",
+    };
+
+    await s3
+        .upload(params, function (s3Err, data) {
+            if (s3Err) throw s3Err;
+            console.log(`File uploaded successfully at ${data.Location}`);
+        })
+        .promise();
+}
+
+async function getSignedUrlForDownload(songS3Path) {
+    const params = {
+        Bucket: BUCKET_NAME,
+        Key: songS3Path,
+        Expires: 180,
+    };
+
+    const url = await new Promise((resolve, reject) => {
+        s3.getSignedUrl("getObject", params, (err, url) => {
+            if (err) reject(err);
+
+            resolve(url);
+        });
+    });
+
+    return url;
 }
 
 /**
@@ -257,15 +300,15 @@ function createDir(dir) {
         fs.mkdirSync(dir, { recursive: true });
     }
 }
+
 function listDir(dir) {
     if (!fs.existsSync(dir)) {
-        console.log(dir, 'doesnt exist!')
+        console.log(dir, "doesnt exist!");
     }
 
     fs.readdirSync(dir).forEach((file) => {
         console.log(file);
     });
-    
 }
 
 module.exports = {

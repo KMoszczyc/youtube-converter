@@ -9,6 +9,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 const dataPath = path.join(os.tmpdir(), "data");
+// const dataPath = path.join(__dirname, "data");
 
 Utils.createDir(dataPath);
 

@@ -2,8 +2,8 @@ var browser = browser || chrome;
 
 //  host
 // const server_endpoint = "https://youtube-converter.onrender.com"
-const server_endpoint = "https://ytmp3-converter.herokuapp.com"
-// const server_endpoint = "https://cloudy-pig-trench-coat.cyclic.app";
+// const server_endpoint = "https://ytmp3-converter.herokuapp.com"
+const server_endpoint = "https://cloudy-pig-trench-coat.cyclic.app";
 // const server_endpoint = "http://localhost:3000";
 
 // endpoints
@@ -127,9 +127,13 @@ async function convertSong() {
     let res = await fetch(full_url);
     let data = await res.json();
     //converting ended
+    console.log(data);
+    const cleaned_url = data.url.replace("\\", "");
+    console.log(cleaned_url);
 
     download_btn.style.display = "block";
-    download_btn.href = `${server_endpoint}/${data.endpointSongPath}`;
+    // download_btn.href = `${server_endpoint}/${data.endpointSongPath}`;
+    download_btn.href = cleaned_url;
     convert_ring.style.display = "none";
 }
 

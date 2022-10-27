@@ -217,7 +217,7 @@ async function downloadSong(info, res) {
     const dstS3SongPath = info["endpointSongPath"].replaceAll("\\", "/");
     await uploadSongToS3Bucket(info["songPath"], dstS3SongPath);
     console.log("Pre-sign mp3 url");
-    const url = await getSignedUrlForDownload(dstS3SongPath);
+    const presignedUrl = await getSignedUrlForDownload(dstS3SongPath);
 
 
     res.set({

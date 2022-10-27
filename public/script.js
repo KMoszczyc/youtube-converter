@@ -9,7 +9,7 @@ const server_endpoint = "https://cloudy-pig-trench-coat.cyclic.app";
 // endpoints
 const download_endpoint = server_endpoint + "/download/";
 const get_info_endpoint = server_endpoint + "/getInfo/";
-// const wakeup_dlp_endpoint = server_endpoint + "/wakeup/";
+const wakeup_dlp_endpoint = server_endpoint + "/wakeup/";
 
 const submit_btn = document.getElementById("submit-btn");
 const url_text_input = document.getElementById("url-text-input");
@@ -50,7 +50,7 @@ window.onload = () => {
     song_start_input.addEventListener("focus", hideCutTimeErrorBox);
     song_end_input.addEventListener("focus", hideCutTimeErrorBox);
 
-    // fetch(wakeup_dlp_endpoint);
+    fetch(wakeup_dlp_endpoint);
 };
 
 /**

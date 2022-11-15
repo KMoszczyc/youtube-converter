@@ -64,7 +64,7 @@ app.get("/clearBucket", async (req, res) => {
     const keys = await Utils.clearBucket()
     console.log('Deleted files:', keys)
 
-    res.json(keys);
+    res.json({'Deleted files': keys});
 });
 
 app.get("/bucketItem", async (req, res) => {

@@ -334,7 +334,10 @@ async function clearBucket(bucket=BUCKET_NAME, dir='') {
 
     const listedObjects = await s3.listObjectsV2(listParams).promise();
 
-    if (listedObjects.Contents.length === 0) return;
+    
+    // Cyclic puts 2 objects by default in the bucket
+    if (listedObjects.Contents.length <= 2) 
+        return [];
 
     const deleteParams = {
         Bucket: BUCKET_NAME,

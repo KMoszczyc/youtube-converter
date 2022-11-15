@@ -4,6 +4,7 @@ const fs = require("fs");
 const ytdl = require("ytdl-core");
 const os = require("os");
 const Utils = require("./src/utils");
+require("dotenv").config();
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -53,16 +54,22 @@ app.get("/getInfo", async (req, res) => {
 });
 
 app.get("/clearBucket", async (req, res) => {
-    const bucketKeys = await Utils.getBucketKeys()
-    console.log(bucketKeys)
-
     res.setHeader("Access-Control-Allow-Origin", "*");
-    res.json(bucketKeys);
+    
+    if(req.query.clear_bucket_password != process.env.CLEAR_BUCKET_PASSWORD){
+        res.json({error: `Wrong password: ${req.query.clear_bucket_password}`});
+        return
+    }
+
+    const keys = await Utils.clearBucket()
+    console.log('Deleted files:', keys)
+
+    res.json(keys);
 });
 
 app.get("/bucketItem", async (req, res) => {
-    const signedUrl = await Utils.getSignedUrlForDownload(req.query.itemBucketPath);
-    console.log(signedUrl)
+    const urls = await Utils.getSignedUrlForDownload(req.query.itemBucketPath);
+    console.log(urls)
 
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.json({url: signedUrl});

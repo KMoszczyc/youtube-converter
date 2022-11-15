@@ -326,11 +326,39 @@ async function getBucketKeys(params = {Bucket: BUCKET_NAME},  allKeys = []){
     return allKeys;
 }
 
+async function clearBucket(bucket=BUCKET_NAME, dir='') {
+    const listParams = {
+        Bucket: bucket,
+        Prefix: dir
+    };
+
+    const listedObjects = await s3.listObjectsV2(listParams).promise();
+
+    if (listedObjects.Contents.length === 0) return;
+
+    const deleteParams = {
+        Bucket: BUCKET_NAME,
+        Delete: { Objects: [] }
+    };
+
+    listedObjects.Contents.forEach(({ Key }) => {
+        deleteParams.Delete.Objects.push({ Key });
+    });
+
+    await s3.deleteObjects(deleteParams).promise();
+
+    if (listedObjects.IsTruncated) 
+        await clearBucket(bucket, dir);
+
+
+    return deleteParams.Delete.Objects
+}
 
 module.exports = {
     downloadSong: downloadSong,
     getInfo: getInfo,
     createDir: createDir,
     getBucketKeys: getBucketKeys,
+    clearBucket: clearBucket,
     getSignedUrlForDownload: getSignedUrlForDownload
 };

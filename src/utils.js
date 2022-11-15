@@ -41,7 +41,7 @@ async function getInfo(url) {
 
     let info = null;
     try {
-        info = await ytdl.getBasicInfo(videoID);
+        info = await ytdl.getInfo(videoID);
     } catch (err) {
         console.log(err);
         return { error: "Video with that url doesn't exist!" };

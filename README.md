@@ -3,7 +3,7 @@ YouTube mp3 converter with frontend in Vanilla JS, CSS, HTML and backend in Node
 
 ## Usage 📄
 Go to
-💻 https://ytmp3-converter.herokuapp.com/  
+💻 https://ytmp3-converter.cyclic.app/
 (it may take a few seconds to load as heroku dynos go to sleep mode if unused for a while)
 
 - Paste youtube link of desired song to the text area  

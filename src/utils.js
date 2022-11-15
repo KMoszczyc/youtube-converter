@@ -19,7 +19,9 @@ String.prototype.replaceAll = function replaceAll(search, replace) {
     return this.split(search).join(replace);
 };
 
-const ytdlp_endpoint = "https://yt-dlp-back.herokuapp.com/download"; // Simple Flask app with yt-dlp package (not available in npm) for song downloading.
+// Simple Flask app with yt-dlp package (not available in npm) for song downloading.
+const ytdlp_endpoint = "https://yt-dlp-back.herokuapp.com/download";
+// const ytdlp_endpoint = "https://yt-dlp-back.onrender.com/download"
 // const ytdlp_endpoint = "http://localhost:5000/download"
 
 /**
@@ -312,9 +314,23 @@ function listDir(dir) {
         console.log(file);
     });
 }
+  
+async function getBucketKeys(params = {Bucket: BUCKET_NAME},  allKeys = []){
+    const response = await s3.listObjectsV2(params).promise();
+    response.Contents.forEach(obj => allKeys.push(obj.Key));
+  
+    if (response.NextContinuationToken) {
+      params.ContinuationToken = response.NextContinuationToken;
+      await getBucketKeys(params, allKeys); // RECURSIVE CALL
+    }
+    return allKeys;
+}
+
 
 module.exports = {
     downloadSong: downloadSong,
     getInfo: getInfo,
     createDir: createDir,
+    getBucketKeys: getBucketKeys,
+    getSignedUrlForDownload: getSignedUrlForDownload
 };

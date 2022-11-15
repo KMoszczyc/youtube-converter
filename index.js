@@ -3,7 +3,7 @@ const path = require("path");
 const fs = require("fs");
 const ytdl = require("ytdl-core");
 const os = require("os");
-const Utils = require("./utils");
+const Utils = require("./src/utils");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -51,3 +51,19 @@ app.get("/getInfo", async (req, res) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.json(info);
 });
+
+app.get("/clearBucket", async (req, res) => {
+    const bucketKeys = await Utils.getBucketKeys()
+    console.log(bucketKeys)
+
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.json(bucketKeys);
+});
+
+app.get("/bucketItem", async (req, res) => {
+    const signedUrl = await Utils.getSignedUrlForDownload(req.query.itemBucketPath);
+    console.log(signedUrl)
+
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.json({url: signedUrl});
+})

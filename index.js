@@ -56,7 +56,7 @@ app.get("/getInfo", async (req, res) => {
 app.get("/clearBucket", async (req, res) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
     
-    if(req.query.clear_bucket_password != process.env.CLEAR_BUCKET_PASSWORD){
+    if(req.headers.clear_bucket_password != process.env.CLEAR_BUCKET_PASSWORD){
         res.json({error: `Wrong password: ${req.query.clear_bucket_password}`});
         return
     }

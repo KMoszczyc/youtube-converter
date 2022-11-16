@@ -51,7 +51,7 @@ async function getInfo(url) {
     }
 
     // console.log(info.videoDetails);
-    let thumbnailUrl = decodeURIComponent(info.videoDetails.thumbnails[info.videoDetails.thumbnails.length - 2].url).split("?")[0];
+    let thumbnailUrl = info.videoDetails.thumbnails[info.videoDetails.thumbnails.length - 2].url.split("?")[0];
     const fullTitle = info.videoDetails.title;
 
     console.log(thumbnailUrl);
@@ -360,11 +360,21 @@ async function clearBucket(bucket=BUCKET_NAME, dir='') {
     return deleteParams.Delete.Objects
 }
 
+
+function decodeUrlsInObject(info){
+    Object.keys(info).forEach((key, value) => {
+        info[key] = decodeURIComponent(info[key])
+      });
+
+    return info
+}
+
 module.exports = {
     downloadSong: downloadSong,
     getInfo: getInfo,
     createDir: createDir,
     getBucketKeys: getBucketKeys,
     clearBucket: clearBucket,
-    getSignedUrlForDownload: getSignedUrlForDownload
+    getSignedUrlForDownload: getSignedUrlForDownload,
+    decodeUrlsInObject: decodeUrlsInObject
 };

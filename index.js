@@ -34,7 +34,7 @@ app.get("/download", async (req, res) => {
         fs.rmSync(sessionDir, { recursive: true });
     }, 180 * 1000);
 
-    let info = req.query;
+    let info = Utils.decodeUrlsInObject(req.query);
     info["endpointSongPath"] = path.join(sessionDir, info.filename);
     info["songPath"] = path.join(fullSessionDirPath, info.filename);
     info["fullSessionDirPath"] = fullSessionDirPath;

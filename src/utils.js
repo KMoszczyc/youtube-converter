@@ -31,11 +31,11 @@ const ytdlp_endpoint = "https://yt-dlp-back.herokuapp.com/download";
  * @returns
  */
 async function getInfo(url) {
-    const usefullPart = url.split("&list=")[0];
-    let [_, videoID] = usefullPart.split("?v=");
+    let videoID = url.split("?v=")[1].split("&")[0];
 
-    // if it's copied link from youtube mobile app
-    if (!videoID) videoID = usefullPart.split("youtu.be/")[1];
+    // if url is from youtube mobile app
+    if (!videoID) 
+        videoID = url.split("youtu.be/")[1];
 
     console.log("videoID: ", videoID);
 

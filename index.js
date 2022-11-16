@@ -7,7 +7,7 @@ const Utils = require("./src/utils");
 require("dotenv").config();
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 4000;
 
 const dataPath = path.join(os.tmpdir(), "data");
 // const dataPath = path.join(__dirname, "data");
@@ -18,7 +18,7 @@ app.use("/data", express.static(dataPath));
 app.use(express.static(__dirname + "/public"));
 
 app.listen(port, () => {
-    console.log("Server running on port 3000");
+    console.log(`Server running on port ${port}`);
 });
 
 /**

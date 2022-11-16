@@ -31,7 +31,7 @@ const ytdlp_endpoint = "https://yt-dlp-back.herokuapp.com/download";
  * @returns
  */
 async function getInfo(url) {
-    let decodedUrl = decodeURI(url)
+    let decodedUrl = decodeURIComponent(url)
     console.log(url, decodedUrl)
 
     let videoID = decodedUrl.split("?v=")[1].split("&")[0];

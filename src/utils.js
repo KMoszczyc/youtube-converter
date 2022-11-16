@@ -51,7 +51,7 @@ async function getInfo(url) {
     }
 
     // console.log(info.videoDetails);
-    let thumbnailUrl = info.videoDetails.thumbnails[info.videoDetails.thumbnails.length - 2].url.split("?")[0];
+    let thumbnailUrl = decodeURIComponent(info.videoDetails.thumbnails[info.videoDetails.thumbnails.length - 2].url).split("?")[0];
     const fullTitle = info.videoDetails.title;
 
     console.log(thumbnailUrl);
@@ -75,7 +75,7 @@ async function getInfo(url) {
         fullTitle,
         filename,
         thumbnailUrl,
-        songUrl: url,
+        songUrl: decodedUrl,
         duration: parseInt(info.videoDetails.lengthSeconds),
         sessionID,
         error: "",

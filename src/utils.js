@@ -32,20 +32,19 @@ const ytdlp_endpoint = "https://yt-dlp-back.herokuapp.com/download";
  */
 async function getInfo(url) {
     let decodedUrl = decodeURIComponent(url);
-    let videoID = null
-
-    // if url contains 'youtube.be' its from youtube mobile app, otherwise its from pc
-    //Mobile
-    if (decodedUrl.includes("youtu.be/"))
-        videoID = decodedUrl.split("youtu.be/")[1];
-    //PC
-    else 
-        videoID = decodedUrl.split("?v=")[1].split("&")[0];
-
-    console.log("videoID: ", videoID);
-
+    let videoID = null;
     let info = null;
+
     try {
+        // if url contains 'youtube.be' its from youtube mobile app, otherwise its from pc
+        //Mobile
+        if (decodedUrl.includes("youtu.be/")) 
+            videoID = decodedUrl.split("youtu.be/")[1];
+        //PC
+        else 
+            videoID = decodedUrl.split("?v=")[1].split("&")[0];
+
+        console.log("videoID: ", videoID);
         info = await ytdl.getInfo(videoID);
     } catch (err) {
         console.log(err);

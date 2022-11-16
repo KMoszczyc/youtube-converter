@@ -10,7 +10,7 @@ const { default: axios } = require("axios");
 const path = require("path");
 require("dotenv").config();
 
-// Temporarly storing mp3 files in AWS S3 bucket - Comment out those lines if you'are not using Cyclic.sh 
+// Temporarly storing mp3 files in AWS S3 bucket - Comment out those lines if you'are not using Cyclic.sh
 const AWS = require("aws-sdk");
 const s3 = new AWS.S3();
 const BUCKET_NAME = "cyclic-cloudy-pig-trench-coat-eu-central-1";
@@ -31,14 +31,16 @@ const ytdlp_endpoint = "https://yt-dlp-back.herokuapp.com/download";
  * @returns
  */
 async function getInfo(url) {
-    let decodedUrl = decodeURIComponent(url)
-    console.log(url, decodedUrl)
+    let decodedUrl = decodeURIComponent(url);
+    let videoID = null
 
-    let videoID = decodedUrl.split("?v=")[1].split("&")[0];
-
-    // if url is from youtube mobile app
-    if (!videoID) 
+    // if url contains 'youtube.be' its from youtube mobile app, otherwise its from pc
+    //Mobile
+    if (decodedUrl.includes("youtu.be/"))
         videoID = decodedUrl.split("youtu.be/")[1];
+    //PC
+    else 
+        videoID = decodedUrl.split("?v=")[1].split("&")[0];
 
     console.log("videoID: ", videoID);
 
@@ -209,7 +211,7 @@ async function downloadSong(info, res) {
 
     await new Promise(function (resolve, reject) {
         stream.on("close", () => resolve(console.log("Raw song.webm download finished!")));
-        stream.on("error", (err) => console.log(err)); 
+        stream.on("error", (err) => console.log(err));
     });
 
     info = await preprocessSong(info);
@@ -223,7 +225,6 @@ async function downloadSong(info, res) {
     await uploadSongToS3Bucket(info["songPath"], dstS3SongPath);
     console.log("Pre-sign mp3 url");
     const presignedUrl = await getSignedUrlForDownload(dstS3SongPath);
-
 
     res.set({
         "Access-Control-Allow-Origin": "*",
@@ -258,7 +259,8 @@ async function uploadSongToS3Bucket(srcSongPath, dstS3SongPath) {
         ContentType: "audio/mpeg",
     };
 
-    await s3.upload(params, function (err, data) {
+    await s3
+        .upload(params, function (err, data) {
             if (err) throw err;
             console.log(`File uploaded successfully at ${data.Location}`);
         })
@@ -317,34 +319,32 @@ function listDir(dir) {
         console.log(file);
     });
 }
-  
-async function getBucketKeys(params = {Bucket: BUCKET_NAME},  allKeys = []){
+
+async function getBucketKeys(params = { Bucket: BUCKET_NAME }, allKeys = []) {
     const response = await s3.listObjectsV2(params).promise();
-    response.Contents.forEach(obj => allKeys.push(obj.Key));
-  
+    response.Contents.forEach((obj) => allKeys.push(obj.Key));
+
     if (response.NextContinuationToken) {
-      params.ContinuationToken = response.NextContinuationToken;
-      await getBucketKeys(params, allKeys); // RECURSIVE CALL
+        params.ContinuationToken = response.NextContinuationToken;
+        await getBucketKeys(params, allKeys); // RECURSIVE CALL
     }
     return allKeys;
 }
 
-async function clearBucket(bucket=BUCKET_NAME, dir='') {
+async function clearBucket(bucket = BUCKET_NAME, dir = "") {
     const listParams = {
         Bucket: bucket,
-        Prefix: dir
+        Prefix: dir,
     };
 
     const listedObjects = await s3.listObjectsV2(listParams).promise();
 
-    
     // Cyclic puts 2 objects by default in the bucket
-    if (listedObjects.Contents.length <= 2) 
-        return [];
+    if (listedObjects.Contents.length <= 2) return [];
 
     const deleteParams = {
         Bucket: BUCKET_NAME,
-        Delete: { Objects: [] }
+        Delete: { Objects: [] },
     };
 
     listedObjects.Contents.forEach(({ Key }) => {
@@ -353,20 +353,17 @@ async function clearBucket(bucket=BUCKET_NAME, dir='') {
 
     await s3.deleteObjects(deleteParams).promise();
 
-    if (listedObjects.IsTruncated) 
-        await clearBucket(bucket, dir);
+    if (listedObjects.IsTruncated) await clearBucket(bucket, dir);
 
-
-    return deleteParams.Delete.Objects
+    return deleteParams.Delete.Objects;
 }
 
-
-function decodeUrlsInObject(info){
+function decodeUrlsInObject(info) {
     Object.keys(info).forEach((key, value) => {
-        info[key] = decodeURIComponent(info[key])
-      });
+        info[key] = decodeURIComponent(info[key]);
+    });
 
-    return info
+    return info;
 }
 
 module.exports = {
@@ -376,5 +373,5 @@ module.exports = {
     getBucketKeys: getBucketKeys,
     clearBucket: clearBucket,
     getSignedUrlForDownload: getSignedUrlForDownload,
-    decodeUrlsInObject: decodeUrlsInObject
+    decodeUrlsInObject: decodeUrlsInObject,
 };

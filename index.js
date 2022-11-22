@@ -9,8 +9,8 @@ require("dotenv").config();
 const app = express();
 const port = process.env.PORT || 4000;
 
-const dataPath = path.join(os.tmpdir(), "data");
-// const dataPath = path.join(__dirname, "data");
+// const dataPath = path.join(os.tmpdir(), "data");
+const dataPath = path.join(__dirname, "data");
 
 Utils.createDir(dataPath);
 
@@ -55,22 +55,22 @@ app.get("/getInfo", async (req, res) => {
 
 app.get("/clearBucket", async (req, res) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
-    
-    if(req.headers.clear_bucket_password != process.env.CLEAR_BUCKET_PASSWORD){
-        res.json({error: `Wrong password: ${req.headers.clear_bucket_password}`});
-        return
+
+    if (req.headers.clear_bucket_password != process.env.CLEAR_BUCKET_PASSWORD) {
+        res.json({ error: `Wrong password: ${req.headers.clear_bucket_password}` });
+        return;
     }
 
-    const keys = await Utils.clearBucket()
-    console.log('Deleted files:', keys)
+    const keys = await Utils.clearBucket();
+    console.log("Deleted files:", keys);
 
-    res.json({'Deleted files': keys});
+    res.json({ "Deleted files": keys });
 });
 
 app.get("/bucketItem", async (req, res) => {
     const urls = await Utils.getSignedUrlForDownload(req.query.itemBucketPath);
-    console.log(urls)
+    console.log(urls);
 
     res.setHeader("Access-Control-Allow-Origin", "*");
-    res.json({url: signedUrl});
-})
+    res.json({ url: signedUrl });
+});

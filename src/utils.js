@@ -10,19 +10,14 @@ const { default: axios } = require("axios");
 const path = require("path");
 require("dotenv").config();
 
-// Temporarly storing mp3 files in AWS S3 bucket - Comment out those lines if you'are not using Cyclic.sh
-const AWS = require("aws-sdk");
-const s3 = new AWS.S3();
-const BUCKET_NAME = "cyclic-cloudy-pig-trench-coat-eu-central-1";
-
 String.prototype.replaceAll = function replaceAll(search, replace) {
     return this.split(search).join(replace);
 };
 
 // Simple Flask app with yt-dlp package (not available in npm) for song downloading.
-const ytdlp_endpoint = "https://yt-dlp-back.herokuapp.com/download";
+// const ytdlp_endpoint = "https://yt-dlp-back.herokuapp.com/download";
 // const ytdlp_endpoint = "https://yt-dlp-back.onrender.com/download"
-// const ytdlp_endpoint = "http://localhost:5000/download"
+const ytdlp_endpoint = "http://127.0.0.1:5000/download";
 
 /**
  * Downloads song info from youtube api and parses yt title to author and song titile.
@@ -38,11 +33,9 @@ async function getInfo(url) {
     try {
         // if url contains 'youtube.be' its from youtube mobile app, otherwise its from pc
         //Mobile
-        if (decodedUrl.includes("youtu.be/")) 
-            videoID = decodedUrl.split("youtu.be/")[1];
+        if (decodedUrl.includes("youtu.be/")) videoID = decodedUrl.split("youtu.be/")[1];
         //PC
-        else 
-            videoID = decodedUrl.split("?v=")[1].split("&")[0];
+        else videoID = decodedUrl.split("?v=")[1].split("&")[0];
 
         console.log("videoID: ", videoID);
         info = await ytdl.getInfo(videoID);
@@ -215,15 +208,7 @@ async function downloadSong(info, res) {
 
     info = await preprocessSong(info);
 
-    // Uncomment if you want to use something else than Cyclic.sh
-    // const presignedUrl = info['endpointSongPath']
-
-    // Comments those lines if you'are not using Cyclic.sh and AWS S3 Bucket
-    console.log("Upload mp3 to S3 Bucket");
-    const dstS3SongPath = info["endpointSongPath"].replaceAll("\\", "/");
-    await uploadSongToS3Bucket(info["songPath"], dstS3SongPath);
-    console.log("Pre-sign mp3 url");
-    const presignedUrl = await getSignedUrlForDownload(dstS3SongPath);
+    const presignedUrl = info["endpointSongPath"];
 
     res.set({
         "Access-Control-Allow-Origin": "*",
@@ -319,44 +304,6 @@ function listDir(dir) {
     });
 }
 
-async function getBucketKeys(params = { Bucket: BUCKET_NAME }, allKeys = []) {
-    const response = await s3.listObjectsV2(params).promise();
-    response.Contents.forEach((obj) => allKeys.push(obj.Key));
-
-    if (response.NextContinuationToken) {
-        params.ContinuationToken = response.NextContinuationToken;
-        await getBucketKeys(params, allKeys); // RECURSIVE CALL
-    }
-    return allKeys;
-}
-
-async function clearBucket(bucket = BUCKET_NAME, dir = "") {
-    const listParams = {
-        Bucket: bucket,
-        Prefix: dir,
-    };
-
-    const listedObjects = await s3.listObjectsV2(listParams).promise();
-
-    // Cyclic puts 2 objects by default in the bucket
-    if (listedObjects.Contents.length <= 2) return [];
-
-    const deleteParams = {
-        Bucket: BUCKET_NAME,
-        Delete: { Objects: [] },
-    };
-
-    listedObjects.Contents.forEach(({ Key }) => {
-        deleteParams.Delete.Objects.push({ Key });
-    });
-
-    await s3.deleteObjects(deleteParams).promise();
-
-    if (listedObjects.IsTruncated) await clearBucket(bucket, dir);
-
-    return deleteParams.Delete.Objects;
-}
-
 function decodeUrlsInObject(info) {
     Object.keys(info).forEach((key, value) => {
         info[key] = decodeURIComponent(info[key]);
@@ -369,8 +316,6 @@ module.exports = {
     downloadSong: downloadSong,
     getInfo: getInfo,
     createDir: createDir,
-    getBucketKeys: getBucketKeys,
-    clearBucket: clearBucket,
     getSignedUrlForDownload: getSignedUrlForDownload,
     decodeUrlsInObject: decodeUrlsInObject,
 };

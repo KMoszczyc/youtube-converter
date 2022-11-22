@@ -3,8 +3,8 @@ var browser = browser || chrome;
 //  host
 // const server_endpoint = "https://youtube-converter.onrender.com"
 // const server_endpoint = "https://ytmp3-converter.herokuapp.com"
-const server_endpoint = "https://ytmp3-converter.cyclic.app/";
-// const server_endpoint = "http://localhost:4000";
+// const server_endpoint = "https://ytmp3-converter.cyclic.app/";
+const server_endpoint = "http://localhost:4000";
 
 // endpoints
 const download_endpoint = server_endpoint + "/download/";
@@ -127,16 +127,10 @@ async function convertSong() {
     let res = await fetch(full_url);
     let data = await res.json();
     //converting ended
+
     console.log(data);
-    const cleaned_url = data.url.replace("\\", "");
-    console.log(cleaned_url);
-
     download_btn.style.display = "block";
-
-    // Uncomment if using something else than Cyclic.sh
-    // download_btn.href = `${server_endpoint}/${cleaned_url}`;
-    download_btn.href = cleaned_url;
-
+    download_btn.href = `${server_endpoint}/${data.url}`;
     convert_ring.style.display = "none";
 }
 

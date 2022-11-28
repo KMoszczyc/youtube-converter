@@ -26,7 +26,7 @@ So firstly:
 - Deploy https://github.com/KMoszczyc/yt-dlp-back on Heroku or Render
 - Change necessary endpoints in this repo (https://github.com/KMoszczyc/youtube-converter) - (script.js and in utils.js)
 - Change BUCKET_NAME in utils.js (optional - if using cyclic.sh)
-- Deploy this repo
+- Deploy this repo (I recommend cyclic.sh)
 - Enjoy!
 
 ## Example usage 📷

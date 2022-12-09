@@ -29,6 +29,8 @@ So firstly:
 - Deploy this repo (I recommend cyclic.sh)
 - Enjoy!
 
+[![Deploy to Cyclic](https://deploy.cyclic.sh/button.svg)](https://deploy.cyclic.sh/)
+
 ## Example usage 📷
 
 <div align="center">

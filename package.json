@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@cyclic.sh/dynamodb": "^0.0.33",
     "aws-sdk": "^2.1240.0",
     "axios": "^0.23.0",
     "dotenv": "^16.0.3",

@@ -14,6 +14,9 @@ require("dotenv").config();
 const AWS = require("aws-sdk");
 const s3 = new AWS.S3();
 const BUCKET_NAME = "cyclic-cloudy-pig-trench-coat-eu-central-1";
+const CyclicDb = require("@cyclic.sh/dynamodb")
+const db = CyclicDb("cloudy-pig-trench-coatCyclicDB")
+const stats_collection = db.collection("stats")
 
 String.prototype.replaceAll = function replaceAll(search, replace) {
     return this.split(search).join(replace);
@@ -23,6 +26,46 @@ String.prototype.replaceAll = function replaceAll(search, replace) {
 // const ytdlp_endpoint = "https://yt-dlp-back.herokuapp.com/download";
 const ytdlp_endpoint = "https://yt-dlp-back.onrender.com/download"
 // const ytdlp_endpoint = "http://localhost:5000/download"
+
+
+
+// Init stats
+// stats_collection.delete('stats')
+// stats_collection.set('stats', {
+//     totalSeconds: 0,
+//     totalConversions: 0,
+//     totalVisits: 0,
+// })
+
+async function updateVisitStats(){
+    let stats = await getStats()
+
+    await stats_collection.set('stats', {
+        totalVisits: stats.totalVisits + 1,
+    })
+
+    let statsUpdated = await getStats()
+    return statsUpdated;
+}
+
+async function updateStats(info){
+    let stats = await getStats()
+    let totalSeconds = stats.totalSeconds + parseInt(info.duration)
+    let totalConversions = stats.totalConversions + 1
+
+    stats_collection.set('stats', {
+        totalSeconds: totalSeconds,
+        totalConversions: totalConversions,
+    })
+
+    console.log(stats)
+    console.log('Updated stats:',totalSeconds, totalConversions)
+}   
+
+async function getStats(){
+    let stats = await stats_collection.get("stats")
+    return stats.props
+}
 
 /**
  * Downloads song info from youtube api and parses yt title to author and song titile.
@@ -225,6 +268,9 @@ async function downloadSong(info, res) {
     console.log("Pre-sign mp3 url");
     const presignedUrl = await getSignedUrlForDownload(dstS3SongPath);
 
+    // Update statistic values like total downloads or seconds
+    await updateStats(info)
+
     res.set({
         "Access-Control-Allow-Origin": "*",
     });
@@ -373,4 +419,6 @@ module.exports = {
     clearBucket: clearBucket,
     getSignedUrlForDownload: getSignedUrlForDownload,
     decodeUrlsInObject: decodeUrlsInObject,
+    getStats: getStats,
+    updateVisitStats: updateVisitStats
 };

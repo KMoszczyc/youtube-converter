@@ -74,3 +74,17 @@ app.get("/bucketItem", async (req, res) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.json({url: signedUrl});
 })
+
+app.get("/getStats", async (req, res) => {
+    const stats = await Utils.getStats();
+
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.json(stats);
+});
+
+app.get("/updateVisitStats", async (req, res) => {
+    const stats = await Utils.updateVisitStats();
+
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.json(stats);
+});

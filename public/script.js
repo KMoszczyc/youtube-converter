@@ -3,13 +3,15 @@ var browser = browser || chrome;
 //  host
 // const server_endpoint = "https://youtube-converter.onrender.com"
 // const server_endpoint = "https://ytmp3-converter.herokuapp.com"
-const server_endpoint = "https://ytmp3-converter.cyclic.app/";
-// const server_endpoint = "http://localhost:4000";
+// const server_endpoint = "https://ytmp3-converter.cyclic.app/";
+const server_endpoint = "http://localhost:4000";
 
 // endpoints
 const download_endpoint = server_endpoint + "/download/";
 const get_info_endpoint = server_endpoint + "/getInfo/";
 const wakeup_dlp_endpoint = server_endpoint + "/wakeup/";
+const get_stats_endpoint = server_endpoint + "/getStats/";
+const update_stats_endpoint = server_endpoint + "/updateVisitStats/";
 
 const submit_btn = document.getElementById("submit-btn");
 const url_text_input = document.getElementById("url-text-input");
@@ -33,6 +35,10 @@ const artist = document.getElementById("artist");
 const song_duration = document.getElementById("song-duration");
 const bitrate_select = document.getElementById("bitrate-select");
 
+const visitStat = document.getElementById("visits-stat");
+const convertedStat = document.getElementById("total-coversions-stat");
+const timeStat = document.getElementById("total-time-stat");
+
 const url_error_box = document.getElementById("url-error-box");
 const song_cut_time_error_box = document.getElementById("song-cut-time-error-box");
 
@@ -51,6 +57,9 @@ window.onload = () => {
     song_end_input.addEventListener("focus", hideCutTimeErrorBox);
 
     fetch(wakeup_dlp_endpoint);
+    fetch(update_stats_endpoint);
+
+    updateStats()
 };
 
 /**
@@ -140,6 +149,19 @@ async function convertSong() {
     convert_ring.style.display = "none";
 }
 
+async function updateStats(){
+    let res = await fetch(get_stats_endpoint);
+    let data = await res.json();
+    console.log(data)
+
+    visitStat.innerHTML = data.totalVisits
+    convertedStat.innerHTML = data.totalConversions
+    timeStat.innerHTML = secondsToPrettyISOTime(data.totalSeconds)
+}
+
+
+
+
 /**
  * Reset UI after clicking download button.
  */
@@ -192,6 +214,17 @@ function secondsToISOTime(secondsStr) {
     if (seconds < 600) timeStr = timeStr.substring(1, timeStr.length);
 
     return timeStr;
+}
+
+function secondsToPrettyISOTime(secondsStr) {
+    let raw_seconds = parseInt(secondsStr);
+
+    var date = new Date(raw_seconds * 1000);
+    var hours = date.getUTCHours();
+    var minutes = date.getUTCMinutes();
+    var seconds = date.getSeconds();
+
+    return `${hours} hours, ${minutes} minutes ${seconds} seconds`
 }
 
 /**

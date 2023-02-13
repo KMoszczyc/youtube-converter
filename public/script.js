@@ -224,7 +224,7 @@ function secondsToPrettyISOTime(secondsStr) {
     var minutes = date.getUTCMinutes();
     var seconds = date.getSeconds();
 
-    return `${hours} hours, ${minutes} minutes ${seconds} seconds`
+    return `${hours}h ${minutes}m ${seconds}s`
 }
 
 /**

@@ -6,10 +6,11 @@ var browser = browser || chrome;
 const server_endpoint = "https://ytmp3-converter.cyclic.app/";
 // const server_endpoint = "http://localhost:4000";
 
+
 // endpoints
 const download_endpoint = server_endpoint + "/download/";
 const get_info_endpoint = server_endpoint + "/getInfo/";
-const wakeup_dlp_endpoint = server_endpoint + "/wakeup/";
+const wakeup_dlp_endpoint = "https://yt-dlp-back.onrender.com/download/wakeup/";
 const get_stats_endpoint = server_endpoint + "/getStats/";
 const update_stats_endpoint = server_endpoint + "/updateVisitStats/";
 

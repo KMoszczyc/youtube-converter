@@ -41,7 +41,7 @@ footer {
   color: #fff;
   text-align: center;
   justify-content: center;
-  padding-bottom: 20px;
+  padding: 0 20px 20px 20px;
   width: 100%;
   gap: 10px;
 }
@@ -256,8 +256,7 @@ option {
   margin: 0; /* Remove margins */
   display: flex;
   flex-direction: column;
-  flex-wrap: wrap;
-  flex-basis: auto
+  
 }
 
 
@@ -266,10 +265,17 @@ option {
 }
 
 .stats-container {
-  -webkit-column-count: 2; 
-  -moz-column-count: 2; 
-  column-count: 2;
+  /* -webkit-column-count: 2; 
+  -moz-column-count: 2;  */
+  /* column-count: 2; */
   column-width: auto;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.no-wrap{
+  flex-shrink: 0;
 }
 
 .align-right {

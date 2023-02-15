@@ -10,7 +10,9 @@ const server_endpoint = "https://ytmp3-converter.cyclic.app/";
 // endpoints
 const download_endpoint = server_endpoint + "/download/";
 const get_info_endpoint = server_endpoint + "/getInfo/";
-const wakeup_dlp_endpoint = "https://yt-dlp-back.onrender.com/download/wakeup/";
+const wakeup_dlp_endpoint = "https://yt-dlp-back.onrender.com/wakeup";
+// const wakeup_dlp_endpoint = "http://127.0.0.1:5000/wakeup";
+
 const get_stats_endpoint = server_endpoint + "/getStats/";
 const update_stats_endpoint = server_endpoint + "/updateVisitStats/";
 
@@ -57,7 +59,7 @@ window.onload = () => {
     song_start_input.addEventListener("focus", hideCutTimeErrorBox);
     song_end_input.addEventListener("focus", hideCutTimeErrorBox);
 
-    fetch(wakeup_dlp_endpoint);
+    fetch(wakeup_dlp_endpoint).then(res => res.json().then(text => console.log(text)));
     fetch(update_stats_endpoint);
 
     updateStats()

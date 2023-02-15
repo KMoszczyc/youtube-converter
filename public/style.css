@@ -63,8 +63,12 @@ a {
   background-size: cover;
 }
 
-.layer {
-  background-image: url("./layer.svg");
+.bottom-layer {
+  background-image: url("./bottom.svg");
+}
+
+.top-layer {
+  background-image: url("./top.svg");
 }
 
 .flip {

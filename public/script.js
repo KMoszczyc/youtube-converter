@@ -159,7 +159,7 @@ async function updateStats(){
 
     visitStat.innerHTML = data.totalVisits
     convertedStat.innerHTML = data.totalConversions
-    timeStat.innerHTML = secondsToPrettyISOTime(data.totalSeconds)
+    timeStat.innerHTML = secondsToHHMMSS(data.totalSeconds)
 }
 
 
@@ -219,15 +219,9 @@ function secondsToISOTime(secondsStr) {
     return timeStr;
 }
 
-function secondsToPrettyISOTime(secondsStr) {
-    let raw_seconds = parseInt(secondsStr);
-
-    var date = new Date(raw_seconds * 1000);
-    var hours = date.getUTCHours();
-    var minutes = date.getUTCMinutes();
-    var seconds = date.getSeconds();
-
-    return `${hours}h ${minutes}m ${seconds}s`
+function secondsToHHMMSS(secondsStr) {
+    let seconds = parseInt(secondsStr);
+    return (Math.floor(seconds / 3600)) + "h " + ("0" + Math.floor(seconds / 60) % 60).slice(-2) + "m " + ("0" + seconds % 60).slice(-2) + "s"
 }
 
 /**

@@ -82,7 +82,7 @@ async function getInfo(url) {
         // if url contains 'youtube.be' its from youtube mobile app, otherwise its from pc
         //Mobile
         if (decodedUrl.includes("youtu.be/")) 
-            videoID = decodedUrl.split("youtu.be/")[1];
+            videoID = decodedUrl.split("youtu.be/")[1].split("?")[0];
         //PC
         else 
             videoID = decodedUrl.split("?v=")[1].split("&")[0];

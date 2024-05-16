@@ -143,12 +143,13 @@ async function convertSong() {
     console.log(data);
     const cleaned_url = data.url.replace("\\", "");
     console.log(cleaned_url);
+    console.log(`${server_endpoint}/${data.url}`)
 
     download_btn.style.display = "block";
 
     // Uncomment if using something else than Cyclic.sh
-    // download_btn.href = `${server_endpoint}/${cleaned_url}`;
-    download_btn.href = cleaned_url;
+    download_btn.href = `${server_endpoint}/${data.url}`;
+    // download_btn.href = cleaned_url;
 
     convert_ring.style.display = "none";
 }

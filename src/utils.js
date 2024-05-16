@@ -259,17 +259,17 @@ async function downloadSong(info, res) {
     info = await preprocessSong(info);
 
     // Uncomment if you want to use something else than Cyclic.sh
-    // const presignedUrl = info['endpointSongPath']
+    const presignedUrl = info['endpointSongPath']
 
     // Comments those lines if you'are not using Cyclic.sh and AWS S3 Bucket
-    console.log("Upload mp3 to S3 Bucket");
-    const dstS3SongPath = info["endpointSongPath"].replaceAll("\\", "/");
-    await uploadSongToS3Bucket(info["songPath"], dstS3SongPath);
-    console.log("Pre-sign mp3 url");
-    const presignedUrl = await getSignedUrlForDownload(dstS3SongPath);
+    // console.log("Upload mp3 to S3 Bucket");
+    // const dstS3SongPath = info["endpointSongPath"].replaceAll("\\", "/");
+    // await uploadSongToS3Bucket(info["songPath"], dstS3SongPath);
+    // console.log("Pre-sign mp3 url");
+    // const presignedUrl = await getSignedUrlForDownload(dstS3SongPath);
 
     // Update statistic values like total downloads or seconds
-    await updateStats(info)
+    // await updateStats(info)
 
     res.set({
         "Access-Control-Allow-Origin": "*",

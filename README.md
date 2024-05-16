@@ -3,7 +3,7 @@ YouTube mp3 converter with frontend in Vanilla JS, CSS, HTML and backend in Node
 
 ## Usage 📄
 Go to
-💻 https://ytmp3-converter.cyclic.app/
+💻 [https://ytmp3-converter.cyclic.app/](https://youtube-converter.adaptable.app/)
 (it may take a few seconds to load as heroku dynos go to sleep mode if unused for a while)
 
 - Paste youtube link of desired song to the text area  
@@ -23,13 +23,11 @@ Go to
 You need to host this repo (local branch for local or master for cyclic.sh) and https://github.com/KMoszczyc/yt-dlp-back for fast youtube download. Ytdl-core is now very slow when it comes to downloading (at least at the time of fixing this bug) compared to yt-dlp and
 yt-dlp doesn't have a npm package, only a python one. That's why a second repo was necessary for this app to work.
 So firstly:
-- Deploy https://github.com/KMoszczyc/yt-dlp-back on Heroku, Render or locally
+- Deploy https://github.com/KMoszczyc/yt-dlp-back on Heroku, Render, Adaptable.io or locally
 - Change necessary endpoints in this repo (https://github.com/KMoszczyc/youtube-converter) - (script.js and in utils.js)
 - Change BUCKET_NAME in utils.js (optional - if using cyclic.sh)
-- Deploy this repo (I recommend cyclic.sh)
+- Deploy this repo (I recommend adaptable.io)
 - Enjoy!
-
-[![Deploy to Cyclic](https://deploy.cyclic.sh/button.svg)](https://deploy.cyclic.sh/)
 
 ## Example usage 📷
 

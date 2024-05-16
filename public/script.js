@@ -11,8 +11,8 @@ const server_endpoint = "https://youtube-converter.adaptable.app/"
 // endpoints
 const download_endpoint = server_endpoint + "/download/";
 const get_info_endpoint = server_endpoint + "/getInfo/";
-// const wakeup_dlp_endpoint = "https://yt-dlp-back.onrender.com/wakeup";
-const wakeup_dlp_endpoint = "https://yt-dlp-back.adaptable.app/wakeup";
+const wakeup_dlp_endpoint = "https://yt-dlp-back.onrender.com/wakeup";
+// const wakeup_dlp_endpoint = "https://yt-dlp-back.adaptable.app/wakeup";
 
 // const wakeup_dlp_endpoint = "http://127.0.0.1:5000/wakeup";
 

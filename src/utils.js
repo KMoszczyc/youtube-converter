@@ -24,8 +24,8 @@ String.prototype.replaceAll = function replaceAll(search, replace) {
 
 // Simple Flask app with yt-dlp package (not available in npm) for song downloading.
 // const ytdlp_endpoint = "https://yt-dlp-back.herokuapp.com/download";
-// const ytdlp_endpoint = "https://yt-dlp-back.onrender.com/download"
-const ytdlp_endpoint = "https://yt-dlp-back.adaptable.app/download"
+const ytdlp_endpoint = "https://yt-dlp-back.onrender.com/download"
+// const ytdlp_endpoint = "https://yt-dlp-back.adaptable.app/download"
 // const ytdlp_endpoint = "http://localhost:5000/download"
 
 

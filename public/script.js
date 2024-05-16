@@ -3,7 +3,8 @@ var browser = browser || chrome;
 //  host
 // const server_endpoint = "https://youtube-converter.onrender.com"
 // const server_endpoint = "https://ytmp3-converter.herokuapp.com"
-const server_endpoint = "https://ytmp3-converter.cyclic.app/";
+// const server_endpoint = "https://ytmp3-converter.cyclic.app/";
+const server_endpoint = "https://youtube-converter.adaptable.app/"
 // const server_endpoint = "http://localhost:4000";
 
 
@@ -153,13 +154,13 @@ async function convertSong() {
 }
 
 async function updateStats(){
-    let res = await fetch(get_stats_endpoint);
-    let data = await res.json();
-    console.log(data)
+    // let res = await fetch(get_stats_endpoint);
+    // let data = await res.json();
+    // console.log(data)
 
-    visitStat.innerHTML = data.totalVisits
-    convertedStat.innerHTML = data.totalConversions
-    timeStat.innerHTML = secondsToHHMMSS(data.totalSeconds)
+    // visitStat.innerHTML = data.totalVisits
+    // convertedStat.innerHTML = data.totalConversions
+    // timeStat.innerHTML = secondsToHHMMSS(data.totalSeconds)
 }
 
 

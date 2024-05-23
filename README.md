@@ -25,7 +25,6 @@ yt-dlp doesn't have a npm package, only a python one. That's why a second repo w
 So firstly:
 - Deploy https://github.com/KMoszczyc/yt-dlp-back on Heroku, Render, Adaptable.io or locally
 - Change necessary endpoints in this repo (https://github.com/KMoszczyc/youtube-converter) - (script.js and in utils.js)
-- Change BUCKET_NAME in utils.js (optional - if using cyclic.sh)
 - Deploy this repo (I recommend adaptable.io)
 - Enjoy!
 
